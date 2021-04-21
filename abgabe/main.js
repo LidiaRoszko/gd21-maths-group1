@@ -10,8 +10,16 @@ class Train {
     }
 
     // TODO moving 
-    move(target) {
-        console.log("train " + this.id + " of value " + this.value + " moves, target: " + target.x + " " + target.y);
+    move(target, hide) {
+        var trainSVG = SVG.find('.train-' + this.id);
+        trainSVG.show();
+        trainSVG.animate(4000, 0, 'now').move(target.x, target.y);
+
+        if (hide) {
+            setTimeout(function () { trainSVG.hide(); }, 5000);
+        }
+
+        console.log("train (id=" + this.id + ") of value " + this.value + " moves, target: " + target.x + " " + target.y);
     }
 
 }
@@ -84,7 +92,7 @@ class Game {
     #equations = ["3+6", "1+2*4"];
 
     // positions for 0,1,2,3 trains
-    #positionsArray = [undefined, undefined, [{ x: 0, y: 0, level: 0}, { x: 300, y: 150, level: 1 }, { x: 0, y: 300, level: 0 }], [{ x: 0, y: 0, level: 0 }, { x: 300, y: 150, level: 1 }, { x: 600, y: 300, level: 2 }, { x: 0, y: 300, level: 0 }, { x: 300, y: 450, level: 1 }, { x: 0, y: 600, level: 0 }]]
+    #positionsArray = [undefined, undefined, [{ x: 30, y: 0, level: 0 }, { x: 330, y: 150, level: 1 }, { x: 30, y: 300, level: 0 }], [{ x: 30, y: 0, level: 0 }, { x: 330, y: 150, level: 1 }, { x: 630, y: 300, level: 2 }, { x: 30, y: 300, level: 0 }, { x: 330, y: 450, level: 1 }, { x: 30, y: 600, level: 0 }]]
 
     // ids for 0,1,2,3 trains (increasing from left to right)
     #idsArray = [undefined, undefined, [0, 2, 1], [0, 3, 5, 1, 4, 2]]
@@ -111,19 +119,19 @@ class Game {
         let eqArr = Array.from(equation).filter(x => String(x).match(/^[\d */+-]+$/));
 
         // start trains
-        let eqNumbers = eqArr.filter(x => !isNaN(Number(x))); 
+        let eqNumbers = eqArr.filter(x => !isNaN(Number(x)));
         let startTrainsNumber = eqNumbers.length;
 
         // stations
         let eqSigns = eqArr.filter(x => isNaN(Number(x)));
-        
+
         let positionsOfTrains = this.#positionsArray[startTrainsNumber]; // TODO finding best positions on canvas for trains + stations(joined trains)
         let ids = this.#idsArray[startTrainsNumber];
 
         for (let i = 0; i < positionsOfTrains.length; i++) {
             // new id (necessary for calculating the order of the new equation)
-            let j = ids[i];    
-            if (i < startTrainsNumber) {         
+            let j = ids[i];
+            if (i < startTrainsNumber) {
                 this.#trains.set(j, new Train(j, eqNumbers[i], positionsOfTrains[j]));
             } else {
                 this.#trains.set(j, new JoinedTrain(j, positionsOfTrains[j]));
@@ -131,7 +139,6 @@ class Game {
         }
 
         this.#stations = eqSigns;
-
         this.#drawElements();
     }
 
@@ -142,13 +149,13 @@ class Game {
     }
 
     // triggered by user by connecting
-    connectTrains(newTrainId, oldTrainId) {        
+    connectTrains(newTrainId, oldTrainId) {
         let train = this.#trains.get(newTrainId);
         train.connectWith(this.#trains.get(oldTrainId))
     }
 
     // triggered by user by disconnecting
-    disconnectTrains(newTrainId, oldTrainId) {        
+    disconnectTrains(newTrainId, oldTrainId) {
         let train = this.#trains.get(newTrainId);
         train.disconnectFrom(this.#trains.get(oldTrainId));
     }
@@ -157,28 +164,79 @@ class Game {
     #drawElements() {
         this.#clearCanvas();
 
-        // drawing trains and stations (https://svgjs.com/docs/3.0/getting-started/)
-        let drawTrains = SVG().addTo('#trains').size('100%', '100%');
-        for (let i = 0; i < this.#trains.size; i++) {
-            let train = this.#trains.get(i);
-            drawTrains.rect(150, 50).opacity(train.visible ? 1 : 0.3).fill('#6885c4').move(train.position.x, train.position.y);
-            if (train.value) {
-                drawTrains.text(train.value).move(train.position.x, train.position.y);
-            }
+        let trainsArr = Array.from(this.#trains.values());
+        let trains = trainsArr.filter(x => x.value);
+        let stations = trainsArr.filter(x => x instanceof (JoinedTrain));
+
+        let draw = SVG().addTo('#trains').size('100%', '100%');
+        this.#drawTrains(trains, draw);
+
+        for (let i = 0; i < stations.length; i++) {
+            let train = stations[i];
+            let group = draw.group();
+            group.addClass('station');
+            group.rect(100, 50).fill('#754f4f').move(train.position.x, train.position.y - 10);
+            group.polygon('0,25 100,25 50,0').fill('#2e1e1e').stroke({ width: 1 }).move(train.position.x, train.position.y - 35);
+            group.text('Bahnhof ' + String(train.id)).font({
+                family: 'Helvetica'
+                , size: 15
+                , anchor: 'middle'
+                , leading: '1.5em'
+            }).move(train.position.x + 15, train.position.y + 5);
         }
 
-        let drawStations = SVG().addTo('#stations').size('100%', '100%');
-        for (let i = 0; i < this.#stations.length; i++) {
-            drawStations.rect(250, 250).fill('#ff0000').move(i * 300, 0);
-            drawStations.text(this.#stations[i]).move(i * 300, 0);
+        /*         let drawStations = SVG().addTo('#stations').size('100%', '100%');
+                for (let i = 0; i < this.#stations.length; i++) {
+                    drawStations.rect(250, 250).fill('#ff0000').move(i * 300, 0);
+                    drawStations.text(this.#stations[i]).move(i * 300, 0);
+                } */
+    }
+
+    #drawTrains(trains, draw) {
+        // drawing loks (https://svgjs.com/docs/3.0/getting-started/)
+        for (let i = 0; i < trains.length; i++) {
+            let train = trains[i];
+            let x = train.position.x;
+            let y = train.position.y;
+            let group = draw.group();
+
+            group.addClass('train-' + train.id);
+            group.rect(50, 20).fill('#6885c4').move(x, y);
+            group.text(String(train.value)).font({
+                family: 'Helvetica'
+                , size: 15
+                , anchor: 'middle'
+                , leading: '1.5em'
+            }).move(train.position.x + 20, train.position.y);
+
+            // drawing cars
+            let carsNumber = Math.floor(Number(train.value) / 5);
+            let modulo = Number(train.value) % 5;
+
+            for (let j = 0; j < carsNumber + 1; j++) {
+                x = x - 42;
+
+                // new car
+                group.rect(40, 20).fill('#4251f5').move(x, y);
+
+                let bars = (carsNumber == j) ? modulo : 5;
+
+                // new bar
+                for (let k = 0; k < bars; k++) {
+                    group.rect(40, 3).fill('#6e3018').move(x, y + 17 - 4 * k);
+                }
+            }
+
+            if (train instanceof JoinedTrain) {
+                group.hide();
+            }
         }
     }
 
     // TODO clear canvas
     #clearCanvas() {
-        $('#stations').html("");
+        //$('#stations').html("");
         $('#trains').html("");
-        $('#target').text("");
     }
 
     // loading the next round with a new equation
@@ -192,36 +250,55 @@ class Game {
     }
 
     giveHint() {
-        console.log("hint for the student");
+        console.log("Hint for user should be displayed!");
     }
 
     startPlayMode() {
-        console.log(this.#trains);
-        // check solution existence = check if only one train is selectable and is joined train
-        let finalTrain = Array.from(this.#trains.values()).filter(x => x.selectable && x instanceof JoinedTrain);
+        this.#drawElements();
 
-        if (finalTrain.length != 1) {
+        // check solution existence = check if only one train is selectable and is joined train
+        let finalTrainArr = Array.from(this.#trains.values()).filter(x => x.selectable && x instanceof JoinedTrain);
+
+        if (finalTrainArr.length != 1) {
             alert("Connect all trains!");
         } else {
+            let finalTrain = finalTrainArr[0];
             // TODO blocking click events
 
+            let oldLevel = 1;
+            let finalTrainDelay = 4000;
             // joined trains segregated according to the order of appearing
-            Array.from(this.#trains.values()).filter(x => x instanceof JoinedTrain).sort((x,y) => {return (x.position.level-y.position.level);}).forEach(train => {
+            Array.from(this.#trains.values()).filter(x => x instanceof JoinedTrain).sort((x, y) => { return (x.position.level - y.position.level); }).forEach(train => {
+                let level = train.position.level;
+                let delay = 5000;
+                if (oldLevel == level) {
+                    delay = 1000;
+                }
+                finalTrainDelay += delay;
+                setTimeout(function () {
                     train.subTrains.forEach(subtrain => {
-                        subtrain.move(train.position);
+                        subtrain.move(train.position, true);
                         $('#result').text(train.eqString);
-                        console.log(train.eqString);
+                        console.log('Subequation: ' + train.eqString);
                     });
+                }, delay);
             });
-            $('#result').append("=" + finalTrain[0].value);
             // check solution correctness 
-            if (eval(this.#equation) == finalTrain[0].value) {
+            if (eval(this.#equation) == finalTrain.value) {
                 this.#points = this.#points + 10;
-                $('#points').text(this.#points);
-                alert("Correct! Your points: " + this.#points);
+                let points = this.#points;
+
+                setTimeout(function () {
+                    finalTrain.move({ x: finalTrain.position.x + 200, y: finalTrain.position.y, level: finalTrain.position.level }, false);
+
+                    $('#result').append("=" + finalTrain.value);
+
+                    $('#points').text(points);
+                    console.log("Correct! Your points: " + points);
+                }, finalTrainDelay)
                 // TODO feedback popup 
             } else {
-                alert("Incorrect!");
+                console.log("Incorrect!");
                 // TODO explosion
             }
         }
@@ -253,20 +330,31 @@ class GameVersion2 extends Game {
 }
 
 let game = new GameVersion1;
-console.log(game)
 game.giveHint();
-game.addStation(1, "+");
+/* game.addStation(1, "+");
 game.connectTrains(1,2);
 game.connectTrains(1,0);
-game.startPlayMode();
+game.startPlayMode(); */
 
 // next round
+console.log("---------Round started---------")
 game.nextRound();
 game.addStation(4, "*");
-game.connectTrains(4,5);
-game.connectTrains(4,3);
+console.log("* sign added to the station 4")
+game.connectTrains(4, 5);
+console.log("train of value 4 (id=5) connected to the train (id=4)")
+game.connectTrains(4, 3);
+console.log("train of value 2 (id=3) connected to the train (id=4)")
 
-game.addStation(2,"+");
-game.connectTrains(2,0);
-game.connectTrains(2,4);
+game.addStation(2, "+");
+console.log("+ sign added to the station 2")
+game.connectTrains(2, 0);
+console.log("train of value 1 (id=0) connected to the train (id=2)")
+game.connectTrains(2, 4);
+console.log("train of value 8 (id=4) connected to the train (id=2)")
+
+console.log("---------Play mode started---------")
 game.startPlayMode();
+
+console.log("---------Game object---------")
+console.log(game)

@@ -1,8 +1,12 @@
 #trains {
-    background-color: black;
+    background-color: rgb(30, 97, 10);
     height: 800px;
 }
 
 #stations {
     background-color: yellow;
+}
+
+.station {
+    z-index: 1;
 }
