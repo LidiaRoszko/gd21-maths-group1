@@ -286,21 +286,22 @@ class Game {
             // check solution correctness 
             if (eval(this.#equation) == finalTrain.value) {
                 this.#points = this.#points + 10;
-                let points = this.#points;
+                console.log("Correct!");
 
-                setTimeout(function () {
-                    finalTrain.move({ x: finalTrain.position.x + 200, y: finalTrain.position.y, level: finalTrain.position.level }, false);
-
-                    $('#result').append("=" + finalTrain.value);
-
-                    $('#points').text(points);
-                    console.log("Correct! Your points: " + points);
-                }, finalTrainDelay)
                 // TODO feedback popup 
             } else {
                 console.log("Incorrect!");
                 // TODO explosion
             }
+            
+            let points = this.#points;
+            setTimeout(function () {
+                finalTrain.move({ x: finalTrain.position.x + 200, y: finalTrain.position.y, level: finalTrain.position.level }, false);
+
+                $('#result').append("=" + finalTrain.value);
+
+                $('#points').text(points);
+            }, finalTrainDelay)
         }
     }
 }
@@ -336,15 +337,40 @@ game.connectTrains(1,2);
 game.connectTrains(1,0);
 game.startPlayMode(); */
 
+console.log("---------Game object---------")
+console.log(game)
+
 // next round
-console.log("---------Round started---------")
+console.log("---------Round started (incorrect)---------")
+game.nextRound();
+game.addStation(1, "+");
+console.log("+ sign added to the station 1")
+game.connectTrains(1, 0);
+console.log("train of value 1 (id=0) connected to the station (id=1)")
+game.connectTrains(1, 3);
+console.log("train of value 2 (id=3) connected to the station (id=1)")
+
+game.addStation(2, "*");
+console.log("* sign added to the station 2")
+game.connectTrains(2, 5);
+console.log("train of value 3 (id=5) connected to the station (id=2)")
+game.connectTrains(2, 1);
+console.log("train of value 4 (id=1) connected to the station (id=2)")
+
+console.log("---------Play mode started---------")
+game.startPlayMode();
+
+setTimeout(function() {
+    
+// next round
+console.log("---------Round started (correct)---------")
 game.nextRound();
 game.addStation(4, "*");
 console.log("* sign added to the station 4")
 game.connectTrains(4, 5);
-console.log("train of value 4 (id=5) connected to the train (id=4)")
+console.log("train of value 4 (id=5) connected to the station (id=4)")
 game.connectTrains(4, 3);
-console.log("train of value 2 (id=3) connected to the train (id=4)")
+console.log("train of value 2 (id=3) connected to the station (id=4)")
 
 game.addStation(2, "+");
 console.log("+ sign added to the station 2")
@@ -355,6 +381,4 @@ console.log("train of value 8 (id=4) connected to the train (id=2)")
 
 console.log("---------Play mode started---------")
 game.startPlayMode();
-
-console.log("---------Game object---------")
-console.log(game)
+}, 14000)
