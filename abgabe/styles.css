@@ -1,8 +1,5 @@
 #trains {
-    background-color: rgb(30, 97, 10);
-    height: 800px;
-}
-
-#stations {
-    background-color: yellow;
+    background-image: url(assets/grass.png);
+    height: 930px;
+    max-width: 1500px;
 }
