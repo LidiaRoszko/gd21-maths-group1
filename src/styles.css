@@ -1,3 +1,8 @@
-.test {
-    color: rgb(37, 80, 175);
+#trains {
+    background-color: black;
+    height: 800px;
+}
+
+#stations {
+    background-color: yellow;
 }
