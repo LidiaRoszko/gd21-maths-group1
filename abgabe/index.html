@@ -4,27 +4,68 @@
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.0.16/svg.min.js">
 </script>
-<link rel="stylesheet" href="styles.css"/>
+<link rel="stylesheet" href="styles.css" />
+
 <head>
   <meta charset="utf-8">
   <title>Reihenfolge von Rechenoperationen und Klammerregeln</title>
 </head>
-<body>
-  <div class="test">
-    <img src="assets/conductor.png" style="width: 50px">
-    <br>
-    <span id="points">0</span> points
-    <br>
-    Target: <span id="target"></span>
-    <br>
-    Result: <span id="result"></span>
-  </div>
-  <div id="trains"> 
 
+<body>
+  <div class="cp_intro">
+    <h1> Reihenfolge von Rechenoperationen und Klammerregeln </h1>
+    <div class="quote">
+      Die Klammer sagt: Zuerst komm ich!" <br />
+      Denk ferner dran: "Stets Punkt vor Strich" <br />
+      Und was noch nicht zum Rechnen dran, <br />
+      das schreibt man unverändert an.
+    </div>
+  </div>
+
+  <div class="cp_section">
+    <h2>Vorrangregeln <strong>"KlaPuStri"</strong></h2>
+    <ol>
+      <li><strong>Kla</strong>mmer: Beginne mit den Rechnungen, die in einer Klammer stehen!</li>
+      <li><strong>Pu</strong>nktrechnungen: Führe dann die Multiplikationen und Divisionen aus!</li>
+      <li><strong>Stri</strong>chrechnungen: Führe die Additionen und die Subtraktionen von links nach rechts aus! </li>
+    </ol>
+    <div class="equation-box">
+      <div class="equation-image">
+        <img class="equation-image" src="assets/Rechnung01.png" width="175">
+      </div>
+      <div class="equation-image">
+        <img class="equation-image" src="assets/Rechnung02.png" width="200">
+      </div>
+      <div class="equation-image">
+        <img class="equation-image" src="assets/Rechnung03.png" width="230">
+      </div>
+      <div class="equation-image">
+        <img class="equation-image" src="assets/Rechnung04.png" width="200">
+      </div>
+    </div>
+  </div>
+  <div class="cp_section">
+    <h2>Spiel "Ich verstehe nur Bahnhof!"</h2>
+    <div class="game">
+      <br>
+      <div class="space-box">
+        <div class="game-button">Start</div>
+        <div class="game-button">Next</div>
+      </div>
+      <div class="space-box">
+        <div class="game-text"><span id="points">0</span> points</div>
+        <span class="game-text">Target: <span id="target"></span></span>
+        <span class="game-text">Result: <span id="result"></span></span>
+      </div>
+
+      <div id="trains">
+      </div>
+    </div>
   </div>
 
   <!-- <div id="stations"></div> -->
 </body>
+
 </html>
 <script src="main.js">
 
