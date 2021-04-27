@@ -46,19 +46,31 @@
   </div>
   <div class="cp_section">
     <h2>Spiel "Ich verstehe nur Bahnhof!"</h2>
-    <div class="game">
+    <div class="game-box">
       <br>
       <div class="space-box">
-        <div class="game-button">Start</div>
-        <div class="game-button">Next</div>
+        <div class="game-button" onclick="game.startPlayMode()">Start</div>
+        <div class="game-button" onclick="game.nextRound()">Next</div>
       </div>
       <div class="space-box">
         <div class="game-text"><span id="points">0</span> points</div>
         <span class="game-text">Target: <span id="target"></span></span>
         <span class="game-text">Result: <span id="result"></span></span>
       </div>
-
-      <div id="trains">
+      <div class="game">
+        <div id="canvas">
+        </div>
+        <div id="overlay">
+        </div>
+        <div id="dropdown" onchange="game.chooseSign()">
+          <select name="signs" id="sign_select">
+            <option value="" disabled selected>Choose sign for the station</option>
+            <option value="+">Plus ( + )</option>
+            <option value="-">Minus ( - )</option>
+            <option value="*">Multiplizieren ( * )</option>
+            <option value="/">Dividieren ( / )</option>
+        </select>
+        </div>
       </div>
     </div>
   </div>

@@ -5,7 +5,7 @@ body {
     margin          : 30px;
 }
 
-#trains {
+#canvas {
     background-image: url(assets/grass.png);
     height          : 930px;
     max-width       : 1500px;
@@ -78,7 +78,7 @@ li {
     font-family   : "Mono", monospace;
 }
 
-.game {
+.game-box {
     max-width       : 1500px;
     margin          : 20px 10px;
     border-radius   : 5% 5% 0 0;
@@ -100,4 +100,39 @@ li {
 
 .game-button:hover {
     background-color: #23720a;
+}
+
+#dropdown {
+    position: absolute;
+    width   : fit-content;
+    top     : 0;
+    left    : 0;
+    display: none;
+}
+
+#sign_select {
+    padding   : 7px 7px;
+    border-radius   : 10px;
+    border          : 5px solid #3d2a26;
+    text-align-last:center; 
+    font-weight: 700;
+}
+
+#sign_select option {
+    text-align-last:center; 
+}
+
+.game {
+    position: relative;
+}
+
+#overlay {
+    width: 100%;
+    height: 100%;
+    opacity: 0.4;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #000;
+    display: none;
 }

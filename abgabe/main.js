@@ -33,7 +33,6 @@ class JoinedTrain extends Train {
         this.subTrains = [];
     }
 
-    // TODO visual part (sign at the station displays)
     updateSign(sign) {
         this.sign = sign;
         this.#calculate();
@@ -85,7 +84,7 @@ class JoinedTrain extends Train {
 
 class Game {
     // all equations for the game TODO: Equations (numbers under 20 look still good)
-    #equations = ["3+6", "4+8*2", "4+8*2-5"];
+    #equations = ["3+6+1", "4+8*2", "4+8*2+1"];
 
     // points received in total
     #points = 0;
@@ -105,6 +104,8 @@ class Game {
 
     #rails = [];
 
+    #currentDropdownStation;
+
     constructor() {
         this.loadEquation(this.#equations[0]);
     }
@@ -116,7 +117,7 @@ class Game {
         this.#rails = [];
 
         // positions for 0,1,2,3 trains
-        const positionsArray = [undefined, undefined, [{ x: 30, y: 0 }, { x: 330, y: 150 }, { x: 30, y: 300 }], [{ x: 30, y: 0 }, { x: 330, y: 150 }, { x: 630, y: 300 }, { x: 30, y: 300 }, { x: 330, y: 450 }, { x: 30, y: 600 }], [{ x: 30, y: 0 }, { x: 330, y: 150 }, { x: 630, y: 300 }, { x: 930, y: 450 }, { x: 30, y: 300 }, { x: 330, y: 450 }, { x: 630, y: 600 }, { x: 30, y: 600 }, { x: 330, y: 750 },  { x: 30, y: 900 }]];
+        const positionsArray = [undefined, undefined, [{ x: 30, y: 0 }, { x: 330, y: 150 }, { x: 30, y: 300 }], [{ x: 30, y: 0 }, { x: 330, y: 150 }, { x: 630, y: 300 }, { x: 30, y: 300 }, { x: 330, y: 450 }, { x: 30, y: 600 }], [{ x: 30, y: 0 }, { x: 330, y: 150 }, { x: 630, y: 300 }, { x: 930, y: 450 }, { x: 30, y: 300 }, { x: 330, y: 450 }, { x: 630, y: 600 }, { x: 30, y: 600 }, { x: 330, y: 750 }, { x: 30, y: 900 }]];
 
         // classification to id and level for 0,1,2,3 trains (increasing from left to right)
         const classificationsArray = [undefined, undefined, [{ id: 0, level: 0 }, { id: 2, level: 0 }, { id: 1, level: 1 }], [{ id: 0, level: 0 }, { id: 3, level: 0 }, { id: 5, level: 0 }, { id: 1, level: 1 }, { id: 4, level: 1 }, { id: 2, level: 2 }], [{ id: 0, level: 0 }, { id: 4, level: 0 }, { id: 7, level: 0 }, { id: 9, level: 0 }, { id: 1, level: 1 }, { id: 5, level: 1 }, { id: 8, level: 1 }, { id: 2, level: 2 }, { id: 6, level: 2 }, { id: 3, level: 3 }]];
@@ -156,14 +157,29 @@ class Game {
         this.#drawElements();
     }
 
-    // TODO choose sign from dropdown (triggered by user by choosing sign)
-    chooseSign(trainId, sign) {
-        let train = this.#trains.get(trainId);
-        train.updateSign(sign);
+    // when on change event triggered
+    chooseSign() {
+        $("#dropdown").hide();
+        $("#overlay").hide();
+
+        this.#currentDropdownStation.updateSign($("#dropdown :selected").val());
+        let trainsArr = Array.from(this.#trains.values());
+        let stations = trainsArr.filter(x => x instanceof (JoinedTrain));
+        this.#drawStations(stations);
     }
 
-    // TODO connect with rails (triggered by user by clicking on station)
-    connectTrains(targetTrainId) {
+    #showDropdown(station) {
+        $("#dropdown").css("top", station.position.y + 50);
+        $("#dropdown").css("left", station.position.x - 95);
+        this.#currentDropdownStation = station;
+
+        // overlay for "forcing" user to choose sign and prevent problems when the chosen station is again small
+        $("#dropdown").show();
+        $("#dropdown select").val("");
+        $("#overlay").show();
+    }
+
+    #connectTrains(targetTrainId) {
         let targetTrain = this.#trains.get(targetTrainId);
         let targetLevel = targetTrain.level;
 
@@ -188,12 +204,12 @@ class Game {
 
         // add rails to access them later
         let rails = [{ start: { x: adjacentTrains[0].position.x + 50, y: adjacentTrains[0].position.y }, target: targetTrain.position, startId: adjacentTrains[0].id, targetId: targetTrain.id }, { start: { x: adjacentTrains[1].position.x + 50, y: adjacentTrains[1].position.y }, target: targetTrain.position, startId: adjacentTrains[1].id, targetId: targetTrainId }];
-        
+
         // if the rails aim to final station
         if (this.#levelsMap.size - 1 == targetTrainId) {
-            rails.push({ start: targetTrain.position, target: {x: targetTrain.position.x + 500, y: targetTrain.position.y}, startId: targetTrainId, targetId: targetTrainId })
+            rails.push({ start: targetTrain.position, target: { x: targetTrain.position.x + 500, y: targetTrain.position.y }, startId: targetTrainId, targetId: targetTrainId })
         }
-        
+
         this.#drawRails(rails);
 
         this.#rails = this.#rails.concat(rails).flat();
@@ -206,7 +222,7 @@ class Game {
 
     #drawElements() {
         this.#clearCanvas();
-        this.#draw = SVG().addTo('#trains').size('100%', '100%');
+        this.#draw = SVG().addTo('#canvas').size('100%', '100%');
 
         let trainsArr = Array.from(this.#trains.values());
         let startTrains = trainsArr.filter(x => x.value);
@@ -262,10 +278,10 @@ class Game {
 
             // drawing cars
             let modulo = Number(train.value) % 5;
-            let fullCarsNumber =  Math.floor(Number(train.value) / 5);
-            let carsNumber = fullCarsNumber + ((modulo==0) ? 0 : 1);
+            let fullCarsNumber = Math.floor(Number(train.value) / 5);
+            let carsNumber = fullCarsNumber + ((modulo == 0) ? 0 : 1);
 
-            for (let j = 0; j < carsNumber ; j++) {
+            for (let j = 0; j < carsNumber; j++) {
                 x = x - 42;
 
                 // new car
@@ -291,17 +307,20 @@ class Game {
 
         for (let i = 0; i < stations.length; i++) {
             let station = stations[i];
-            SVG.find('.station-' + station.id).remove();
+            SVG.find('.small-station-' + station.id).remove();
+            SVG.find('.big-station-' + station.id).remove();
             let group = this.#draw.group();
-            group.addClass('station-' + station.id);
+            group.addClass('station');
             if (station.subTrains.length == 2) {
+                group.addClass('big-station-' + station.id);
+                group.on('click', function () { this.#showDropdown(station) }.bind(this));
                 group.svg(stationBigSVG).move(station.position.x - 70, station.position.y - 70);
                 let signPosition;
-                switch(station.sign) {
-                    case '*': signPosition = {x: station.position.x + 39, y: station.position.y - 56}; break;
-                    case '-': signPosition = {x: station.position.x + 42, y: station.position.y - 62}; break;
-                    case '/': signPosition = {x: station.position.x + 41, y: station.position.y - 60}; break;
-                    default: signPosition = {x: station.position.x + 38, y: station.position.y - 60};
+                switch (station.sign) {
+                    case '*': signPosition = { x: station.position.x + 39, y: station.position.y - 56 }; break;
+                    case '-': signPosition = { x: station.position.x + 42, y: station.position.y - 62 }; break;
+                    case '/': signPosition = { x: station.position.x + 41, y: station.position.y - 60 }; break;
+                    default: signPosition = { x: station.position.x + 38, y: station.position.y - 60 };
                 }
                 group.text(station.sign).font({
                     family: 'Helvetica'
@@ -309,21 +328,25 @@ class Game {
                     , anchor: 'start'
                     , weight: 900
                 }).move(signPosition.x, signPosition.y);
-    
+
             } else {
+                group.on('click', function () { this.#connectTrains(station.id); }.bind(this));
+                group.addClass('small-station-' + station.id);
                 group.svg(stationSmallSVG).move(station.position.x - 30, station.position.y - 30);
             }
         }
     }
-
     // TODO clear canvas
     #clearCanvas() {
-        $('#trains').html("");
+        $('#canvas').html("");
         $('#result').text("");
+        $("#dropdown").hide();
+        $("#overlay").hide();
     }
 
     // loading the next round with a new equation
     nextRound() {
+        console.log("Next round")
         this.loadEquation(this.#equations[Math.floor((this.#equations.length - 1) * Math.random() + 1)]);
     }
 
@@ -411,32 +434,9 @@ class GameVersion2 extends Game {
 
 let game = new GameVersion1;
 console.log(game);
-game.nextRound();
 game.giveHint();
-game.chooseSign(4, "*");
-game.connectTrains(1);
-game.connectTrains(4);
-game.connectTrains(2);
-game.chooseSign(2, "+");
-game.startPlayMode();
-
 
 /*
-let game = new GameVersion1;
-console.log(game);
-game.nextRound();
-game.giveHint();
-game.connectTrains(1);
-game.connectTrains(8);
-game.connectTrains(5);
-game.chooseSign(5, "*");
-game.connectTrains(2);
-game.connectTrains(6);
-game.chooseSign(6, "-");
-game.connectTrains(3);
-game.chooseSign(3, "+");
-game.startPlayMode();
-
 0
    1
 3     2
