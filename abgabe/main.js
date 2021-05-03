@@ -1,90 +1,51 @@
-class Train {
-    value; visible; id; eqString; position; level;
-    constructor(id, value, position, level) {
-        this.value = value;
-        this.id = id;
-        this.visible = true;
-        this.eqString = value;
-        this.position = position;
-        this.level = level;
-    }
-
-    // TODO rotation of trains
-    move(target, duration, delay) {
-        let trainSVG = SVG.find('.train-' + this.id);
-
-        trainSVG.animate(duration, delay, "now").move(target.x, target.y);
-
-        setTimeout(function () { trainSVG.show(); }, delay);
-
-        setTimeout(function () { trainSVG.hide(); }, delay + duration - 1000);
-
-        console.log("train (id=" + this.id + ") of value " + this.value + " moves, target: " + target.x + " " + target.y);
-    }
-
-}
-
-class JoinedTrain extends Train {
-    sign; subTrains;
-    constructor(id, position, level) {
-        super(id, undefined, position, level);
-        this.visible = false;
-        this.sign = "";
-        this.subTrains = [];
-    }
-
-    updateSign(sign) {
-        this.sign = sign;
-        this.#calculate();
-    }
-
-    connectWith(train1, train2) {
-        this.subTrains = [];
-        this.subTrains.push(train1);
-        this.subTrains.push(train2);
-        this.visible = true;
-        this.#calculate();
-    }
-
-    disconnectFrom(trainId) {
-        let subtrainsIds = this.subTrains.map(x => x.id);
-        if (subtrainsIds.includes(trainId)) {
-            this.subTrains = this.subTrains.filter(x => x.id != trainId);
-            this.sign = "";
-            this.#calculate();
-        }
-    }
-
-    // after station added or connecting
-    #calculate() {
-        if (this.sign.match(/^[*/+-]+$/) && this.subTrains.length == 2) {
-            // right appearance in the equation
-            this.subTrains.sort((x, y) => x.id - y.id);
-
-            // not necessary brackets removed
-            let train1 = this.subTrains[0];
-            let train2 = this.subTrains[1];
-            let ex1 = "(" + String(train1.eqString) + ")" + this.sign + "(" + String(train2.eqString) + ")";
-            let ex2 = "(" + String(train1.eqString) + ")" + this.sign + String(train2.eqString);
-            let ex3 = String(train1.eqString) + this.sign + "(" + String(train2.eqString) + ")";
-            let ex4 = String(train1.eqString) + this.sign + String(train2.eqString);
-            switch (eval(ex1)) {
-                case eval(ex4): this.eqString = ex4; break;
-                case eval(ex2): this.eqString = ex2; break;
-                case eval(ex3): this.eqString = ex3; break;
-                default: this.eqString = ex1;
-            }
-        } else if (this.subTrains.length == 1) {
-            let train1 = this.subTrains[0];
-            this.eqString = train1.eqString;
-        }
-        this.value = eval(this.eqString);
-    }
-}
 
 class Game {
     // all equations for the game TODO: Equations (numbers under 20 look still good)
-    #equations = ["3+6+1", "4+8*2", "4+8*2+1"];
+#equations=['(15+9)+2=26',
+'(6+13)-11=8',
+'(1+10)*2=22',
+'(2+12)/2=7',
+'(9-1)+9=17',
+'(13-10)-5=-2',
+'(14-8)*4=24',
+'(11-3)/4=2',
+'(2*6)+10=22',
+'(1*15)-7=8',
+'(4*3)*2=24',
+'(9*6)/3=18',
+'(14/7)+5=7',
+'(18/3)-2=4',
+'(16/4)*5=20',
+'(27/3)/3=3',
+'6+(8+4)=18',
+'3+(7-2)=8',
+'5+(3*5)=20',
+'7+(10/2)=12',
+'10-(1+6)=3',
+'8-(10-8)=6',
+'15-(3*2)=9',
+'13-(6/3)=11',
+'5*(1+4)=25',
+'12*(9-7)=24',
+'5*(3*2)=30',
+'12*(12/6)=24',
+'12/(2+1)=4',
+'15/(6-3)=5',
+'24/(2*3)=4',
+'30/(8/4)=15',
+'11+3+7+2=23',
+'4+1+11-5=11',
+'5+13-3*4=5',
+'12+2-15/5=11',
+'13+2*4+3=24',
+'5+10*1-7=8',
+'10-6+3+2=9',
+'11-4+12-9=10',
+'(3+1)*(5+2)=21',
+'(7+1)*(14-12)=16',
+'7+(12/3)*2=15',
+
+];
 
     // points received in total
     #points = 0;
@@ -107,7 +68,7 @@ class Game {
     #currentDropdownStation;
 
     constructor() {
-        this.loadEquation(this.#equations[0]);
+        this.loadEquation(this.#equations[Math.round(Math.random()*this.#equations.length-1)]);
     }
 
     // loading of an equation & drawing trains and stations
@@ -122,11 +83,13 @@ class Game {
         // classification to id and level for 0,1,2,3 trains (increasing from left to right)
         const classificationsArray = [undefined, undefined, [{ id: 0, level: 0 }, { id: 2, level: 0 }, { id: 1, level: 1 }], [{ id: 0, level: 0 }, { id: 3, level: 0 }, { id: 5, level: 0 }, { id: 1, level: 1 }, { id: 4, level: 1 }, { id: 2, level: 2 }], [{ id: 0, level: 0 }, { id: 4, level: 0 }, { id: 7, level: 0 }, { id: 9, level: 0 }, { id: 1, level: 1 }, { id: 5, level: 1 }, { id: 8, level: 1 }, { id: 2, level: 2 }, { id: 6, level: 2 }, { id: 3, level: 3 }]];
 
-        this.#equation = equation;
-        let eqArr = Array.from(equation).filter(x => String(x).match(/^[\d */+-]+$/));
+        
+        let rightSide=equation.match(/[=].*\d+/g)[0];
+        let leftSide=equation.replace(rightSide,'');
+        let eqArr = leftSide.match(/\d+/g);
         let eqNumbers = eqArr.filter(x => !isNaN(Number(x)));
         let startTrainsNumber = eqNumbers.length;
-
+        this.#equation = leftSide;
         let positionsOfTrains = positionsArray[startTrainsNumber]; // TODO finding best positions on canvas for trains + stations(joined trains)
         let classification = classificationsArray[startTrainsNumber];
 
@@ -218,6 +181,12 @@ class Game {
         let trainsArr = Array.from(this.#trains.values());
         let stations = trainsArr.filter(x => x instanceof (JoinedTrain));
         this.#drawStations(stations);
+        console.log('adjacentTrains.length '+ adjacentTrains.length);
+        adjacentTrains.forEach(adjacentTrain=>{
+            adjacentTrain.animatedTrains.forEach(element => {
+                element.setupPath(adjacentTrain.id);
+            });}
+        );
     }
 
     #drawElements() {
@@ -243,14 +212,20 @@ class Game {
             let targetId = rails[i].targetId;
             let group = this.#draw.group();
             group.addClass('rails-' + startId + '-' + targetId);
+            group.id('rails-' + startId);
             group.path('M' + start.x + ' ' + (start.y + 15) + ' S ' + target.x / 1.15 + ' ' + (target.y + 15) + ', ' + target.x + ' ' + (target.y + 15)).stroke({ width: 20, color: '#4d4b42', linecap: "round" }).fill('none');
             group.path('M' + start.x + ' ' + (start.y + 15) + ' S ' + target.x / 1.15 + ' ' + (target.y + 15) + ', ' + target.x + ' ' + (target.y + 15)).stroke({ width: 30, color: '#4d4b42', linecap: "round", opacity: 0.7 }).fill('none');
             group.path('M' + start.x + ' ' + (start.y + 15) + ' S ' + target.x / 1.15 + ' ' + (target.y + 15) + ', ' + target.x + ' ' + (target.y + 15)).stroke({ width: 37, color: '#4d4b42', linecap: "round", opacity: 0.4 }).fill('none');
             group.path('M' + start.x + ' ' + (start.y + 15) + ' S ' + target.x / 1.15 + ' ' + (target.y + 15) + ', ' + target.x + ' ' + (target.y + 15)).stroke({ width: 39, color: '#4d4b42', linecap: "round", opacity: 0.1 }).fill('none');
             group.path('M' + start.x + ' ' + (start.y + 15) + ' S ' + target.x / 1.15 + ' ' + (target.y + 15) + ', ' + target.x + ' ' + (target.y + 15)).stroke({ width: 20, color: "#000000", dasharray: '1 4' }).fill('none');
-            group.path('M' + start.x + ' ' + (start.y + 10) + ' S ' + target.x / 1.15 + ' ' + (target.y + 10) + ', ' + target.x + ' ' + (target.y + 10)).stroke({ width: 2, color: "#000000", linecap: "round" }).fill('none')
+            group.path('M' + start.x + ' ' + (start.y + 10) + ' S ' + target.x / 1.15 + ' ' + (target.y + 10) + ', ' + target.x + ' ' + (target.y + 10)).stroke({ width: 2, color: "#000000", linecap: "round" }).fill('none');
             group.path('M' + start.x + ' ' + (start.y + 20) + ' S ' + target.x / 1.15 + ' ' + (target.y + 20) + ', ' + target.x + ' ' + (target.y + 20)).stroke({ width: 2, color: "#000000" }).fill('none');
 
+            //bottom rail
+            //middle
+            group.path('M' + start.x + ' ' + (start.y + 15) + ' S ' + target.x / 1.15 + ' ' + (target.y + 15) + ', ' + target.x + ' ' + (target.y + 15)).stroke({ width: 1, color: "transparent", linecap: "round" }).fill('none').id('centerline'+startId);
+
+            //top rail
             SVG.find('.station-' + targetId).before(group);
             SVG.find('.station-' + startId).before(group);
             SVG.find('.train-' + targetId).before(group);
@@ -262,42 +237,41 @@ class Game {
     #drawTrains(trains) {
         // drawing loks (https://svgjs.com/docs/3.0/getting-started/)
         for (let i = 0; i < trains.length; i++) {
+            let lokOffset=100;
             let train = trains[i];
             let x = train.position.x;
             let y = train.position.y;
-            let group = this.#draw.group();
+            let cargoGroup = this.#draw.image('./assets/'+train.cargo);
+            cargoGroup.attr({ x:  train.position.x - lokOffset, y: train.position.y });
+            cargoGroup.css('overflow', 'visible');
+           
+                       //img offset
+            //cargo.attr({ x:  0, y: -36});
 
+            train.cargoTrains.push(cargoGroup);
+            let group = this.#draw.nested();
             group.addClass('train-' + train.id);
-            group.rect(50, 20).fill('#6885c4').move(x, y);
-            group.text(String(train.value)).font({
+            group.css('overflow', 'visible')
+            let lok = group.group()
+            lok.css('overflow', 'visible')
+
+            lok.image('./assets/lok.png');
+            group.attr({ x:  train.position.x,  y: train.position.y });
+            //img offset height=36px
+            //img.attr({ x:  -50, y: 0});
+
+            lok.text(String(train.value)).font({
                 family: 'Helvetica'
                 , size: 15
-                , anchor: 'middle'
-                , leading: '1.5em'
-            }).move(train.position.x + 20, train.position.y);
-
-            // drawing cars
-            let modulo = Number(train.value) % 5;
-            let fullCarsNumber = Math.floor(Number(train.value) / 5);
-            let carsNumber = fullCarsNumber + ((modulo == 0) ? 0 : 1);
-
-            for (let j = 0; j < carsNumber; j++) {
-                x = x - 42;
-
-                // new car
-                group.rect(40, 20).fill('#4251f5').move(x, y);
-
-                let bars = (fullCarsNumber <= j) ? modulo : 5;
-
-                // new bar
-                for (let k = 0; k < bars; k++) {
-                    group.rect(40, 3).fill('#6e3018').move(x, y + 17 - 4 * k);
-                }
-            }
+                , leading: '1.5em',fill: '#ffffff'
+            }).attr({x:15,y: 6});
+            train.group=group;
 
             if (train instanceof JoinedTrain) {
                 group.hide();
+                cargoGroup.hide();
             }
+            train.updateAnimatedTrains();
         }
     }
 
@@ -373,19 +347,25 @@ class Game {
         }
 
         let finalTrain = this.#trains.get(this.#levelsMap.size - 1);
-        let duration = 6000;
+        let duration = 3500;
         let delay = 0;
 
         // firstly trains from level 0 goes, later level 1, 2 ...
         for (let i = 1; i < this.#levelsMap.size; i++) {
+            console.log( 'moving '+this.#levelsMap.get(i).length + ' joinedTrains' )
             this.#levelsMap.get(i).forEach(train => {
+                console.log( 'moving '+train.subTrains.length + ' subTrains' )
+
                 train.subTrains.forEach(subtrain => {
+                
                     subtrain.move(train.position, duration - 1500, delay);
                     $('#result').text(train.eqString);
                     console.log('Subequation: ' + train.eqString);
                 });
+
             });
             delay += duration - 500;
+
         }
 
         // check solution correctness 
@@ -416,7 +396,9 @@ class GameVersion1 extends Game {
 
     loadEquation(equation) {
         super.loadEquation(equation);
-        $('#target').text(equation + "=" + eval(equation));
+        let rightSide=equation.match(/[=].*\d+/g)[0];
+        let leftSide=equation.replace(rightSide,'');
+        $('#target').text(leftSide + "=" + eval(leftSide));
     }
 }
 
