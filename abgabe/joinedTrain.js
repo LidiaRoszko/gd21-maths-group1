@@ -7,6 +7,8 @@ class JoinedTrain extends Train {
         this.visible = false;
         this.sign = "";
         this.subTrains = [];
+        this.connected=false;
+        this.bigStation=false;
     }
 
     updateSign(sign) {

@@ -66,7 +66,7 @@ class Game {
     #rails = [];
 
     #currentDropdownStation;
-
+    #currentLevel=1;
     constructor() {
         this.loadEquation(this.#equations[Math.round(Math.random()*this.#equations.length-1)]);
     }
@@ -126,12 +126,15 @@ class Game {
         $("#overlay").hide();
 
         this.#currentDropdownStation.updateSign($("#dropdown :selected").val());
+        this.setStationBlur(this.#currentDropdownStation.id,false);
         let trainsArr = Array.from(this.#trains.values());
         let stations = trainsArr.filter(x => x instanceof (JoinedTrain));
+
         this.#drawStations(stations);
     }
 
     #showDropdown(station) {
+
         $("#dropdown").css("top", station.position.y + 50);
         $("#dropdown").css("left", station.position.x - 95);
         this.#currentDropdownStation = station;
@@ -142,7 +145,57 @@ class Game {
         $("#overlay").show();
     }
 
-    #connectTrains(targetTrainId) {
+    setStationBlur(id,on){
+        if(on){
+
+            SVG.find('.small-station-' + id).css({
+                transition: 'filter 1s easeIn',
+                filter:'drop-shadow(4px 4px 10px #ff0000) drop-shadow(-4px -4px 10px #ff0000)'});
+
+            SVG.find('.big-station-' + id).css({
+                transition: 'filter 1s',
+                filter:'drop-shadow(4px 4px 10px #ff0000) drop-shadow(-4px -4px 10px #ff0000)'});
+
+        }else{
+            SVG.find('.small-station-' + id).css('filter', null);
+            SVG.find('.big-station-' + id).css('filter', null);
+        }
+
+    }
+
+    #connectTrains(station) {
+
+        let unconnectedStations=Array.from(this.#levelsMap.values()).flat();
+
+        unconnectedStations= unconnectedStations.filter(
+            station=> (station.connected==false||(station.bigStation==true&&station.sign=="")) );
+
+        unconnectedStations= unconnectedStations.filter(
+            unconnectedStation=>unconnectedStation.level<station.level);
+
+        if(unconnectedStations.length>0){
+
+            let minLevel= Math.min(...unconnectedStations.map(unconnectedStation=>unconnectedStation.level));
+            console.log(minLevel);
+
+            //console.log(unconnectedStations);
+
+            //console.log(minLevel);
+            unconnectedStations=unconnectedStations.filter(unconnectedStation=>unconnectedStation.level==minLevel);
+            unconnectedStations.forEach(unconnectedStation => this.setStationBlur(unconnectedStation.id,true));
+            return;
+        }
+        this.#levelsMap.get(station.level).forEach(stationAtLevel=>{
+            if(!stationAtLevel.connected){
+                this.connectStation(stationAtLevel)
+            }
+            }
+        );
+        this.connectStation(station)
+        this.#showDropdown(station);
+    }
+    connectStation(station){
+        let targetTrainId=station.id;
         let targetTrain = this.#trains.get(targetTrainId);
         let targetLevel = targetTrain.level;
 
@@ -187,8 +240,8 @@ class Game {
                 element.setupPath(adjacentTrain.id);
             });}
         );
+        station.connected=true;
     }
-
     #drawElements() {
         this.#clearCanvas();
         this.#draw = SVG().addTo('#canvas').size('100%', '100%');
@@ -286,6 +339,7 @@ class Game {
             let group = this.#draw.group();
             group.addClass('station');
             if (station.subTrains.length == 2) {
+                station.bigStation=true;
                 group.addClass('big-station-' + station.id);
                 group.on('click', function () { this.#showDropdown(station) }.bind(this));
                 group.svg(stationBigSVG).move(station.position.x - 70, station.position.y - 70);
@@ -304,7 +358,9 @@ class Game {
                 }).move(signPosition.x, signPosition.y);
 
             } else {
-                group.on('click', function () { this.#connectTrains(station.id); }.bind(this));
+                station.bigStation=false;
+
+                group.on('click', function () { this.#connectTrains(station); }.bind(this));
                 group.addClass('small-station-' + station.id);
                 group.svg(stationSmallSVG).move(station.position.x - 30, station.position.y - 30);
             }
@@ -346,10 +402,10 @@ class Game {
             return;
         }
 
-        let finalTrain = this.#trains.get(this.#levelsMap.size - 1);
-        let duration = 3500;
-        let delay = 0;
-
+        let finalTrain = this.#trains.get(this.#levelsMap.size - 1),
+        duration = 3500,
+        delay = 0,
+        totalDuration=0;
         // firstly trains from level 0 goes, later level 1, 2 ...
         for (let i = 1; i < this.#levelsMap.size; i++) {
             console.log( 'moving '+this.#levelsMap.get(i).length + ' joinedTrains' )
@@ -365,15 +421,18 @@ class Game {
 
             });
             delay += duration - 500;
+            totalDuration+=duration+delay;
 
         }
-
+        let result="";
         // check solution correctness 
         if (eval(this.#equation) == finalTrain.value) {
             this.#points = this.#points + 10;
+            result="Correct!";
             console.log("Correct!");
             // TODO feedback popup 
         } else {
+            result="Incorrect!";
             console.log("Incorrect!");
             // TODO explosion
         }
@@ -384,6 +443,9 @@ class Game {
             finalTrain.move({ x: finalTrain.position.x + 250, y: finalTrain.position.y }, duration, 0);
             $('#result').append("=" + finalTrain.value);
             $('#points').text(points);
+            setTimeout(function(){
+                alert(result);
+            },duration);
         }, delay);
     }
 }
@@ -392,6 +454,7 @@ class Game {
 class GameVersion1 extends Game {
     constructor() {
         super();
+        
     }
 
     loadEquation(equation) {
