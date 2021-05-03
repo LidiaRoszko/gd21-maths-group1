@@ -18,6 +18,7 @@ class Train {
         this.lok=null;
         this.moving=false;
         this.animatedTrains=[];
+        this.finaltrain=false;
     }
 
     updateAnimatedTrains(){
@@ -44,8 +45,12 @@ class Train {
             element.show();
             //element.attr({ x:  0, y: 0});
         });
-
-        let offset=18;
+        console.log('level' + this.level);
+        
+        let offset=17;
+        if(this.level>=1&&!this.finaltrain){
+            offset+=15;
+        }
         this.animatedTrains.forEach((train,id)=>{       
             let animator=train.setupPath(this.id);
             let totaltrains=this.animatedTrains.length;

@@ -162,11 +162,13 @@ class Game {
         }
 
     }
-
-    #connectTrains(station) {
+    checkUnconnectedTrains(station){
 
         let unconnectedStations=Array.from(this.#levelsMap.values()).flat();
-
+        if(station==null){
+            console.log(unconnectedStations);
+            station=unconnectedStations[unconnectedStations.length-1];
+        }
         unconnectedStations= unconnectedStations.filter(
             station=> (station.connected==false||(station.bigStation==true&&station.sign=="")) );
 
@@ -183,6 +185,13 @@ class Game {
             //console.log(minLevel);
             unconnectedStations=unconnectedStations.filter(unconnectedStation=>unconnectedStation.level==minLevel);
             unconnectedStations.forEach(unconnectedStation => this.setStationBlur(unconnectedStation.id,true));
+            return true;
+        }
+        else return false;
+    }
+    #connectTrains(station) {
+
+        if(this.checkUnconnectedTrains(station)){
             return;
         }
         this.#levelsMap.get(station.level).forEach(stationAtLevel=>{
@@ -312,12 +321,16 @@ class Game {
             group.attr({ x:  train.position.x,  y: train.position.y });
             //img offset height=36px
             //img.attr({ x:  -50, y: 0});
+            let valueText=lok.group();
+            //valueText.rect(20,20).fill('#ffffff').move(8,8);
+            valueText.text(String(train.value)).font({
+                family: 'Helvetica',
+                weight: 'bold'
+                , size: 16,
+                 anchor:   'middle'
 
-            lok.text(String(train.value)).font({
-                family: 'Helvetica'
-                , size: 15
                 , leading: '1.5em',fill: '#ffffff'
-            }).attr({x:15,y: 6});
+            }).move(8,8);
             train.group=group;
 
             if (train instanceof JoinedTrain) {
@@ -390,6 +403,10 @@ class Game {
     }
 
     startPlayMode() {
+
+        if(this.checkUnconnectedTrains(null)){
+            return;
+        }
         // creates now as well joined trains
         this.#drawElements();
 
@@ -406,6 +423,8 @@ class Game {
         duration = 3500,
         delay = 0,
         totalDuration=0;
+        finalTrain.finaltrain=true;
+
         // firstly trains from level 0 goes, later level 1, 2 ...
         for (let i = 1; i < this.#levelsMap.size; i++) {
             console.log( 'moving '+this.#levelsMap.get(i).length + ' joinedTrains' )
