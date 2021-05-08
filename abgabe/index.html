@@ -60,16 +60,15 @@
       <div class="game">
         <div id="canvas">
         </div>
-        <div id="overlay">
+        <div id="disablingActionsOverlay">
         </div>
-        <div id="dropdown" onchange="game.chooseSign()">
-          <select name="signs" id="sign_select">
-            <option value="" disabled selected>Choose sign for the station</option>
-            <option value="+">Plus ( + )</option>
-            <option value="-">Minus ( - )</option>
-            <option value="*">Multiplizieren ( * )</option>
-            <option value="/">Dividieren ( / )</option>
-        </select>
+        <div id="signOverlay">
+        </div>
+        <div id="signButtons">
+            <input type="button" value="+" class="sign-button" onclick="game.chooseSign('+')"/>
+            <input type="button" value="-" class="sign-button" onclick="game.chooseSign('-')"/>
+            <input type="button" value="*" class="sign-button" onclick="game.chooseSign('*')"/>
+            <input type="button" value="/" class="sign-button" onclick="game.chooseSign('/')"/>
         </div>
       </div>
     </div>

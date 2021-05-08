@@ -102,37 +102,40 @@ li {
     background-color: #23720a;
 }
 
-#dropdown {
+#signButtons {
     position: absolute;
     width   : fit-content;
-    top     : 0;
-    left    : 0;
     display: none;
+    padding      : 7px 7px;
+    border-radius: 10px;
+    font-weight  : 700;
+    margin-left: 40px;
 }
 
-#sign_select {
-    padding   : 7px 7px;
-    border-radius   : 10px;
-    border          : 5px solid #3d2a26;
-    text-align-last:center; 
-    font-weight: 700;
-}
-
-#sign_select option {
-    text-align-last:center; 
+.sign-button {
+    text-align-last: center;
 }
 
 .game {
     position: relative;
 }
 
-#overlay {
-    width: 100%;
-    height: 100%;
-    opacity: 0.4;
-    position: absolute;
-    top: 0;
-    left: 0;
+#signOverlay {
+    width           : 100%;
+    height          : 100%;
+    opacity         : 0.4;
+    position        : absolute;
+    top             : 0;
+    left            : 0;
     background-color: #000;
-    display: none;
+    display         : none;
+}
+
+#disablingActionsOverlay {
+    width   : 100%;
+    height  : 100%;
+    top     : 0;
+    left    : 0;
+    display : none;
+    position: absolute;
 }

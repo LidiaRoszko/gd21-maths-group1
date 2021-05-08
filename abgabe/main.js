@@ -65,7 +65,7 @@ class Game {
 
     #rails = [];
 
-    #currentDropdownStation;
+    #chosenStation;
     #currentLevel=1;
     constructor() {
         this.loadEquation(this.#equations[Math.round(Math.random()*this.#equations.length-1)]);
@@ -121,28 +121,27 @@ class Game {
     }
 
     // when on change event triggered
-    chooseSign() {
-        $("#dropdown").hide();
-        $("#overlay").hide();
+    chooseSign(sign) {
+        $("#signButtons").hide();
+        $("#signOverlay").hide();
 
-        this.#currentDropdownStation.updateSign($("#dropdown :selected").val());
-        this.setStationBlur(this.#currentDropdownStation.id,false);
+        this.#chosenStation.updateSign(sign);
+        this.setStationBlur(this.#chosenStation.id,false);
         let trainsArr = Array.from(this.#trains.values());
         let stations = trainsArr.filter(x => x instanceof (JoinedTrain));
 
         this.#drawStations(stations);
     }
 
-    #showDropdown(station) {
+    #showSignButtons(station) {
 
-        $("#dropdown").css("top", station.position.y + 50);
-        $("#dropdown").css("left", station.position.x - 95);
-        this.#currentDropdownStation = station;
+        $("#signButtons").css("top", station.position.y + 50);
+        $("#signButtons").css("left", station.position.x - 95);
+        this.#chosenStation = station;
 
         // overlay for "forcing" user to choose sign and prevent problems when the chosen station is again small
-        $("#dropdown").show();
-        $("#dropdown select").val("");
-        $("#overlay").show();
+        $("#signButtons").show();
+        $("#signOverlay").show();
     }
 
     setStationBlur(id,on){
@@ -201,7 +200,7 @@ class Game {
             }
         );
         this.connectStation(station)
-        this.#showDropdown(station);
+        this.#showSignButtons(station);
     }
     connectStation(station){
         let targetTrainId=station.id;
@@ -354,7 +353,7 @@ class Game {
             if (station.subTrains.length == 2) {
                 station.bigStation=true;
                 group.addClass('big-station-' + station.id);
-                group.on('click', function () { this.#showDropdown(station) }.bind(this));
+                group.on('click', function () { this.#showSignButtons(station) }.bind(this));
                 group.svg(stationBigSVG).move(station.position.x - 70, station.position.y - 70);
                 let signPosition;
                 switch (station.sign) {
@@ -383,13 +382,14 @@ class Game {
     #clearCanvas() {
         $('#canvas').html("");
         $('#result').text("");
-        $("#dropdown").hide();
-        $("#overlay").hide();
+        $("#signButtons").hide();
+        $("#signOverlay").hide();
     }
 
     // loading the next round with a new equation
     nextRound() {
         console.log("Next round")
+        $("#disablingActionsOverlay").hide();
         this.loadEquation(this.#equations[Math.floor((this.#equations.length - 1) * Math.random() + 1)]);
     }
 
@@ -407,6 +407,9 @@ class Game {
         if(this.checkUnconnectedTrains(null)){
             return;
         }
+        
+        $("#disablingActionsOverlay").show();
+
         // creates now as well joined trains
         this.#drawElements();
 
