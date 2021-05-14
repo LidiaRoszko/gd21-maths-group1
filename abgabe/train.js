@@ -1,4 +1,4 @@
-const cargos=["waterTank.png","stones.png","logs.png"];
+
 
 class Train {
     value; visible; id; eqString; position; level;
@@ -9,7 +9,6 @@ class Train {
         this.eqString = value;
         this.position = position;
         this.level = level;
-        this.cargo= cargos[Math.round(Math.random()*(cargos.length-1))];
         this.group=null;
         this.rails=null;
         this.path;

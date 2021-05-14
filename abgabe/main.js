@@ -167,7 +167,7 @@ class Game {
         let unconnectedStations=Array.from(this.#levelsMap.values()).flat();
         if(station==null){
             console.log(unconnectedStations);
-            station=unconnectedStations[unconnectedStations.length-1];
+            station=unconnectedStations[unconnectedStations];
         }
         unconnectedStations= unconnectedStations.filter(
             station=> (station.connected==false||(station.bigStation==true&&station.sign=="")) );
@@ -303,8 +303,8 @@ class Game {
             let train = trains[i];
             let x = train.position.x;
             let y = train.position.y;
-            let cargoGroup = this.#draw.image('./assets/'+train.cargo);
-            cargoGroup.attr({ x:  train.position.x - lokOffset, y: train.position.y });
+            let cargoGroup = this.#draw.image('./assets/cart-'+train.value%10+'.png').height(36).width(100);
+            cargoGroup.attr({ x:  train.position.x +100 - lokOffset, y: train.position.y });
             cargoGroup.css('overflow', 'visible');
            
                        //img offset
@@ -317,8 +317,8 @@ class Game {
             let lok = group.group()
             lok.css('overflow', 'visible')
 
-            lok.image('./assets/lok.png');
-            group.attr({ x:  train.position.x,  y: train.position.y });
+            lok.image('./assets/locomotive.png').height(40).width(100);
+            group.attr({ x:  train.position.x+100,  y: train.position.y });
             //img offset height=36px
             //img.attr({ x:  -50, y: 0});
             let valueText=lok.group();
