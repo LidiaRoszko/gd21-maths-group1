@@ -54,6 +54,6 @@ class JoinedTrain extends Train {
             let train1 = this.subTrains[0];
             this.eqString = train1.eqString;
         }
-        this.value = eval(this.eqString);
+        this.value = Math.trunc(eval(this.eqString));
     }
 }
