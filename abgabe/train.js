@@ -18,7 +18,7 @@ class Train {
         this.lok = null;
         this.moving = false;
         this.animatedTrains = [];
-        this.finaltrain = false;
+        this.finalTrain = false;
     }
 
     updateAnimatedTrains() {
@@ -48,7 +48,7 @@ class Train {
             console.log('level' + this.level);
     
             let offset = 17;
-            if (this.level >= 1 && !this.finaltrain) {
+            if (this.level >= 1 && !this.finalTrain) {
                 offset += 15;
             }
             this.animatedTrains.forEach((train, id) => {

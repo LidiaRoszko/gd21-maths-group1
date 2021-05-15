@@ -168,7 +168,7 @@ equations=['(15+9)+2=26',
         if(station==undefined){
             //final station
             station=this.trains.get(this.levelsMap.size - 1);
-            unconnectedStations= unconnectedStations.filter(unconnectedStation=>((unconnectedStation.level<station.level) || station.finaltrain));
+            unconnectedStations= unconnectedStations.filter(unconnectedStation=>((unconnectedStation.level<station.level) || station.finalTrain));
         } else {
             unconnectedStations= unconnectedStations.filter(unconnectedStation=>(unconnectedStation.level<station.level));
         }
@@ -419,7 +419,7 @@ equations=['(15+9)+2=26',
         duration = 3500,
         delay = 0,
         totalDuration=0;
-        finalTrain.finaltrain=true;
+        finalTrain.finalTrain=true;
 
         // check if everything is connected
         if(this.checkUnconnectedTrains()){
