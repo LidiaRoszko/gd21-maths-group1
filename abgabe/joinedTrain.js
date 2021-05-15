@@ -1,5 +1,3 @@
-
-
 class JoinedTrain extends Train {
     sign; subTrains;
     constructor(id, position, level) {
@@ -7,13 +5,13 @@ class JoinedTrain extends Train {
         this.visible = false;
         this.sign = "";
         this.subTrains = [];
-        this.connected=false;
-        this.bigStation=false;
+        this.connected = false;
+        this.bigStation = false;
     }
 
     updateSign(sign) {
         this.sign = sign;
-        this.#calculate();
+        this.calculate();
     }
 
     connectWith(train1, train2) {
@@ -21,7 +19,7 @@ class JoinedTrain extends Train {
         this.subTrains.push(train1);
         this.subTrains.push(train2);
         this.visible = true;
-        this.#calculate();
+        this.calculate();
     }
 
     disconnectFrom(trainId) {
@@ -29,12 +27,12 @@ class JoinedTrain extends Train {
         if (subtrainsIds.includes(trainId)) {
             this.subTrains = this.subTrains.filter(x => x.id != trainId);
             this.sign = "";
-            this.#calculate();
+            this.calculate();
         }
     }
 
     // after station added or connecting
-    #calculate() {
+    calculate() {
         if (this.sign.match(/^[*/+-]+$/) && this.subTrains.length == 2) {
             // right appearance in the equation
             this.subTrains.sort((x, y) => x.id - y.id);
