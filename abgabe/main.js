@@ -1,3 +1,4 @@
+window.isPlayModeActive = false;
 class Game {
     // all equations for the game TODO: Equations (numbers under 20 look still good)
 equations=['(15+9)+2=26',
@@ -160,20 +161,18 @@ equations=['(15+9)+2=26',
 
     }
     checkUnconnectedTrains(station){
+        let unconnectedStations=Array.from(this.trains.values());
 
-        let unconnectedStations=Array.from(this.levelsMap.values()).flat();
-        if(station==null){
-            console.log(unconnectedStations);
-            station=unconnectedStations[unconnectedStations.length-1];
+        unconnectedStations= unconnectedStations.filter(
+            i=> (i.connected==false||(i.bigStation==true&&i.sign=="")));
+        if(station==undefined){
+            //final station
+            station=this.trains.get(this.levelsMap.size - 1);
+            unconnectedStations= unconnectedStations.filter(unconnectedStation=>((unconnectedStation.level<station.level) || station.finaltrain));
+        } else {
+            unconnectedStations= unconnectedStations.filter(unconnectedStation=>(unconnectedStation.level<station.level));
         }
-        unconnectedStations= unconnectedStations.filter(
-            station=> (station.connected==false||(station.bigStation==true&&station.sign=="")) );
-
-        unconnectedStations= unconnectedStations.filter(
-            unconnectedStation=>unconnectedStation.level<station.level);
-
         if(unconnectedStations.length>0){
-
             let minLevel= Math.min(...unconnectedStations.map(unconnectedStation=>unconnectedStation.level));
             console.log(minLevel);
 
@@ -400,41 +399,50 @@ equations=['(15+9)+2=26',
         console.log("Hint for user should be displayed!");
     }
 
-    startPlayMode() {
-
-        if(this.checkUnconnectedTrains(null)){
-            return;
+    startStopPlayMode() {
+        if(window.isPlayModeActive) {
+            this.stopPlayMode();
+        } else {
+            this.startPlayMode();
         }
-        
-        $("#disablingActionsOverlay").show();
+    }
 
-        // creates now as well joined trains
+    stopPlayMode() {
+        window.isPlayModeActive = !window.isPlayModeActive;
+        $("#startStopButton")[0].innerText = "Los geht's";
+        $("#disablingActionsOverlay").hide();
         this.drawElements();
+    }
 
-        // TODO blocking click events
-
-        let trains = Array.from(this.trains.values());
-
-        if ([...trains].filter(x => x instanceof JoinedTrain && x.subtrains == 0).length != 0) {
-            alert("Connect all trains!");
-            return;
-        }
-
+    startPlayMode() {
         let finalTrain = this.trains.get(this.levelsMap.size - 1),
         duration = 3500,
         delay = 0,
         totalDuration=0;
         finalTrain.finaltrain=true;
 
+        // check if everything is connected
+        if(this.checkUnconnectedTrains()){
+            return;
+        }
+        
+        window.isPlayModeActive = !window.isPlayModeActive;
+
+        $("#startStopButton")[0].innerText = "Anhalten";
+        
+        // blocking click events
+        $("#disablingActionsOverlay").show();
+
+        // creates now as well joined trains
+        this.drawElements();
+
         // firstly trains from level 0 goes, later level 1, 2 ...
         for (let i = 1; i < this.levelsMap.size; i++) {
             console.log( 'moving '+this.levelsMap.get(i).length + ' joinedTrains' )
             this.levelsMap.get(i).forEach(train => {
                 console.log( 'moving '+train.subTrains.length + ' subTrains' )
-
                 train.subTrains.forEach(subtrain => {
-                
-                    subtrain.move(train.position, duration - 1500, delay);
+                    subtrain.move(delay);
                     $('#result').text(train.eqString);
                     console.log('Subequation: ' + train.eqString);
                 });
@@ -442,7 +450,6 @@ equations=['(15+9)+2=26',
             });
             delay += duration - 500;
             totalDuration+=duration+delay;
-
         }
         let result="";
         // check solution correctness 
@@ -460,12 +467,14 @@ equations=['(15+9)+2=26',
         let points = this.points;
 
         setTimeout(function () {
-            finalTrain.move({ x: finalTrain.position.x + 250, y: finalTrain.position.y }, duration, 0);
-            $('#result').append("=" + finalTrain.value);
-            $('#points').text(points);
-            setTimeout(function(){
-                alert(result);
-            },duration);
+            if(window.isPlayModeActive) {
+                finalTrain.move({ x: finalTrain.position.x + 250, y: finalTrain.position.y }, duration, 0);
+                $('#result').append("=" + finalTrain.value);
+                $('#points').text(points);
+                setTimeout(function(){
+                    alert(result);
+                },duration);
+            }
         }, delay);
     }
 }
