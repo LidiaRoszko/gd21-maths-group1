@@ -386,12 +386,14 @@ equations=['(15+9)+2=26',
     // loading the next round with a new equation
     nextRound() {
         console.log("Next round")
+        this.stopPlayMode();
         $("#disablingActionsOverlay").hide();
         this.loadEquation(this.equations[Math.floor((this.equations.length - 1) * Math.random() + 1)]);
     }
 
     // reloading the canvas
     reset() {
+        this.stopPlayMode();
         this.loadEquation(this.equation);
     }
 
