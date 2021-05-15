@@ -96,6 +96,7 @@ li {
     cursor          : pointer;
     transition      : background-color .4s;
     font-size       : 25px;
+    user-select     : none;
 }
 
 .game-button:hover {
@@ -103,13 +104,13 @@ li {
 }
 
 #signButtons {
-    position: absolute;
-    width   : fit-content;
-    display: none;
+    position     : absolute;
+    width        : fit-content;
+    display      : none;
     padding      : 7px 7px;
     border-radius: 10px;
     font-weight  : 700;
-    margin-left: 40px;
+    margin-left  : 40px;
 }
 
 .sign-button {
