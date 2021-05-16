@@ -1,3 +1,6 @@
+*{
+    color:black;
+}
 body {
     font-family     : "Semikolon", sans-serif;
     font-size       : 19.2px;
@@ -48,7 +51,13 @@ h2 {
     font-size    : 29px;
     border-bottom: 1px solid #75742d;
 }
+h3{
+    color: black;
+    display: flex;
+    width: 100%;
+    height: 100%;
 
+}
 .quote {
     font-style: italic;
     padding   : 10px;
@@ -71,33 +80,24 @@ li {
     padding        : 10px 0;
 }
 
-.game-text {
-    padding       : 15px 0;
-    font-weight   : 600;
-    font-size     : 23px;
-    text-align    : center;
-    letter-spacing: 1.2px;
-    font-family   : "Mono", monospace;
-}
 
 .game-box {
     max-width       : 1500px;
     margin          : 20px 10px;
     border-radius   : 5% 5% 0 0;
-    background-color: #1b1b1b;
-    border          : 1px solid #eee;
+    background-color: white;
+    border          : 6px solid black;
     color           : #dbdbdb;
 }
 
 .game-button {
     background-color: #1a5209;
-    border-radius   : 10%;
-    padding         : 10px 20px;
-    height          : fit-content;
-    margin          : auto;
+    border-radius   : 20px;
+    padding: 1rem 3rem;
     cursor          : pointer;
     transition      : background-color .4s;
     font-size       : 25px;
+    color: white;
 }
 
 .game-button:hover {
@@ -140,4 +140,93 @@ li {
     left    : 0;
     display : none;
     position: absolute;
+}
+.gameheader{
+    padding: 3rem;
+    display: grid;
+    grid-template-rows: 2fr 3fr 3fr 2fr;
+    grid-template-columns: repeat(3, 1fr) auto;
+    grid-template-areas: "header sadcow happycow ."
+     "equation sadcow happycow points"
+     "equation goodhay badhay points"
+     "buttons goodhay badhay .";
+
+}
+.equation{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+
+   grid-area: equation;
+   font-weight   : 600;
+   font-size     : 42px;
+   text-align    : center;
+   letter-spacing: 1.2px;
+   font-family   : "Mono", monospace;
+}
+.buttons{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: space-around;
+    grid-area: buttons;
+}
+.sadcow{
+
+    grid-area: sadcow;
+}
+.scoreIcon{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+    font-weight: bold;
+    font-size: 36px;
+}
+.sadcow img{
+    height: 100%;
+    width: auto;
+    
+}
+.happycow{
+    grid-area: happycow;
+
+}
+.happycow img{
+    height: 100%;
+    width: auto;
+    
+}
+.goodhay{
+    grid-area: goodhay;
+
+
+}
+.goodhay img{
+    height: 100%;
+    width: auto;
+    
+}
+.badhay{
+    grid-area: badhay;
+
+
+}
+.badhay img{
+    height: 100%;
+    width: auto;
+    
+}
+.points{
+    grid-area: points;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    font-weight: bold;
+    font-size: 36px;
+    align-items: center;
+    
 }

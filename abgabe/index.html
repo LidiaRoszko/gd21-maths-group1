@@ -47,6 +47,35 @@
   <div class="cp_section">
     <h2>Spiel "Ich verstehe nur Bahnhof!"</h2>
     <div class="game-box">
+      <div class="gameheader">
+        <h3>Die Kühe brauchen Futter</h1>
+          <div class="equation">
+            <span class="game-text"><span id="target"></span></span>
+          </div>
+          <div class="buttons">
+            <div class="game-button" onclick="game.startPlayMode()">Start</div>
+            <div class="game-button" onclick="game.nextRound()">Next</div>
+          </div>
+         <div class="sadcow scoreIcon">
+           <p>0x</p>
+           <img src="assets/sadcow.png" alt="Traurige Kuh">
+         </div> 
+         <div class="happycow scoreIcon">
+          <p>0x</p>
+           <img src="assets/happycow.png" alt="Glückliche Kuh">
+         </div>
+         <div class="goodhay scoreIcon">
+          <p>0x</p>
+           <img src="assets/goodhay.png" alt="Gutes Heu">
+         </div>
+         <div class="badhay scoreIcon">
+          <p>0x</p>
+           <img src="assets/badhay.png" alt="Schlechtes Heu">
+         </div>
+         <div class="points">
+           10 Punkte
+         </div>
+        <!--
       <br>
       <div class="space-box">
         <div class="game-button" onclick="game.startPlayMode()">Start</div>
@@ -57,6 +86,9 @@
         <span class="game-text">Target: <span id="target"></span></span>
         <span class="game-text">Result: <span id="result"></span></span>
       </div>
+      -->
+
+    </div>
       <div class="game">
         <div id="canvas">
         </div>
@@ -74,7 +106,6 @@
     </div>
   </div>
 
-  <!-- <div id="stations"></div> -->
   <script src="pathAnimator.js">
   </script>
     <script src="animatedTrain.js">
