@@ -421,7 +421,7 @@ class Game {
                 station.bigStation = true;
                 group.addClass('big-station-' + station.id);
                 group.on('click', function () { this.#showSignButtons(station) }.bind(this));
-                group.image('assets/bigStation.svg').move(station.position.x - 70, station.position.y - 70);
+                group.image('assets/bigstation.svg').move(station.position.x - 70, station.position.y - 70);
                 let signPosition;
                 switch (station.sign) {
                     case '*': signPosition = { x: station.position.x + 39, y: station.position.y - 56 }; break;
@@ -441,7 +441,7 @@ class Game {
 
                 group.on('click', function () { this.#connectTrains(station); }.bind(this));
                 group.addClass('small-station-' + station.id);
-                group.image('assets/smallStation.svg').move(station.position.x - 30, station.position.y - 30);
+                group.image('assets/smallstation.svg').move(station.position.x - 30, station.position.y - 30);
             }
         }
     }
