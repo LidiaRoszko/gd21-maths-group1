@@ -371,8 +371,11 @@ class Game {
                 }
             }
             numberOfWagons++;
+            let cargoGroup;
+
+            cargoGroup = this.#draw.image('./assets/cart-' + hayToTransport + '.png').height(36).width(100);
+
             
-            let cargoGroup = this.#draw.image('./assets/cart-' + hayToTransport%10 + '.png').height(36).width(100);
             cargoGroup.attr({ x: train.position.x + 100 - lokOffset*numberOfWagons, y: train.position.y });
             cargoGroup.css('overflow', 'visible');
             train.cargoTrains.push(cargoGroup);
