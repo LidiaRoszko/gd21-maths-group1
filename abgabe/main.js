@@ -1,51 +1,95 @@
+function setSadCows(trainValue, solution) {
+    if (trainValue > solution) {
+        $('.sadcow>p').text(0 + 'x').css('color','green');
+        return 0;
+
+    } else {
+        $('.sadcow>p').text(solution - trainValue + 'x').css('color','red');
+        return solution - trainValue;
+
+    }
+}
+function setHappyCows(trainValue, solution) {
+    if (trainValue > solution) {
+        $('.happycow>p').text(solution + 'x').css('color','green');
+        return solution;
+    } else {
+        $('.happycow>p').text(trainValue + 'x').css('color','green');
+        return trainValue;
+
+    }
+}
+function setGoodHay(trainValue, solution) {
+        $('.goodhay>p').text(trainValue + 'x');
+}
+function setBadHay(trainValue, solution) {
+    if (trainValue < solution) {
+        $('.badhay>p').text(0 + 'x').css('color','green');
+        return 0;
+
+    } else {
+        $('.badhay>p').text(trainValue-solution + 'x').css('color','red');
+        return trainValue-solution;
+
+    }
+}
+function setPoints(points){
+    $('.points').css("transform", "scale(1.5)");
+
+    setTimeout(function(){
+        $('.points').text(points+ ' Punkte');
+        $('.points').css("transform", "scale(1)");
+        
+    },200);
+}
 
 class Game {
     // all equations for the game TODO: Equations (numbers under 20 look still good)
-#equations=['(15+9)+2=26',
-'(6+13)-11=8',
-'(1+10)*2=22',
-'(2+12)/2=7',
-'(9-1)+9=17',
-'(13-10)-5=-2',
-'(14-8)*4=24',
-'(11-3)/4=2',
-'(2*6)+10=22',
-'(1*15)-7=8',
-'(4*3)*2=24',
-'(9*6)/3=18',
-'(14/7)+5=7',
-'(18/3)-2=4',
-'(16/4)*5=20',
-'(27/3)/3=3',
-'6+(8+4)=18',
-'3+(7-2)=8',
-'5+(3*5)=20',
-'7+(10/2)=12',
-'10-(1+6)=3',
-'8-(10-8)=6',
-'15-(3*2)=9',
-'13-(6/3)=11',
-'5*(1+4)=25',
-'12*(9-7)=24',
-'5*(3*2)=30',
-'12*(12/6)=24',
-'12/(2+1)=4',
-'15/(6-3)=5',
-'24/(2*3)=4',
-'30/(8/4)=15',
-'11+3+7+2=23',
-'4+1+11-5=11',
-'5+13-3*4=5',
-'12+2-15/5=11',
-'13+2*4+3=24',
-'5+10*1-7=8',
-'10-6+3+2=9',
-'11-4+12-9=10',
-'(3+1)*(5+2)=21',
-'(7+1)*(14-12)=16',
-'7+(12/3)*2=15',
+    #equations = ['(15+9)+2=26',
+        '(6+13)-11=8',
+        '(1+10)*2=22',
+        '(2+12)/2=7',
+        '(9-1)+9=17',
+        //'(13-10)-5=-2',
+        '(14-8)*4=24',
+        '(11-3)/4=2',
+        '(2*6)+10=22',
+        '(1*15)-7=8',
+        '(4*3)*2=24',
+        '(9*6)/3=18',
+        '(14/7)+5=7',
+        '(18/3)-2=4',
+        '(16/4)*5=20',
+        '(27/3)/3=3',
+        '6+(8+4)=18',
+        '3+(7-2)=8',
+        '5+(3*5)=20',
+        '7+(10/2)=12',
+        '10-(1+6)=3',
+        '8-(10-8)=6',
+        '15-(3*2)=9',
+        '13-(6/3)=11',
+        '5*(1+4)=25',
+        '12*(9-7)=24',
+        '5*(3*2)=30',
+        '12*(12/6)=24',
+        '12/(2+1)=4',
+        '15/(6-3)=5',
+        '24/(2*3)=4',
+        '30/(8/4)=15',
+        /*'11+3+7+2=23',
+        '4+1+11-5=11',
+        '5+13-3*4=5',
+        '12+2-15/5=11',
+        '13+2*4+3=24',
+        '5+10*1-7=8',
+        '10-6+3+2=9',
+        '11-4+12-9=10',
+        '(3+1)*(5+2)=21',
+        '(7+1)*(14-12)=16',
+        '7+(12/3)*2=15',*/
 
-];
+    ];
 
     // points received in total
     #points = 0;
@@ -65,10 +109,10 @@ class Game {
 
     #rails = [];
     #chosenStation;
-    #currentLevel=1;
+    #currentLevel = 1;
 
     constructor() {
-        this.loadEquation(this.#equations[Math.round(Math.random()*this.#equations.length-1)]);
+        this.loadEquation(this.#equations[Math.round(Math.random() * this.#equations.length - 1)]);
     }
 
     // loading of an equation & drawing trains and stations
@@ -83,9 +127,9 @@ class Game {
         // classification to id and level for 0,1,2,3 trains (increasing from left to right)
         const classificationsArray = [undefined, undefined, [{ id: 0, level: 0 }, { id: 2, level: 0 }, { id: 1, level: 1 }], [{ id: 0, level: 0 }, { id: 3, level: 0 }, { id: 5, level: 0 }, { id: 1, level: 1 }, { id: 4, level: 1 }, { id: 2, level: 2 }], [{ id: 0, level: 0 }, { id: 4, level: 0 }, { id: 7, level: 0 }, { id: 9, level: 0 }, { id: 1, level: 1 }, { id: 5, level: 1 }, { id: 8, level: 1 }, { id: 2, level: 2 }, { id: 6, level: 2 }, { id: 3, level: 3 }]];
 
-        
-        let rightSide=equation.match(/[=].*\d+/g)[0];
-        let leftSide=equation.replace(rightSide,'');
+
+        let rightSide = equation.match(/[=].*\d+/g)[0];
+        let leftSide = equation.replace(rightSide, '');
         let eqArr = leftSide.match(/\d+/g);
         let eqNumbers = eqArr.filter(x => !isNaN(Number(x)));
         let startTrainsNumber = eqNumbers.length;
@@ -118,7 +162,7 @@ class Game {
             }
         }
         this.#drawElements();
-        
+
     }
 
     // when on change event triggered
@@ -127,7 +171,7 @@ class Game {
         $("#signOverlay").hide();
 
         this.#chosenStation.updateSign(sign);
-        this.setStationBlur(this.#chosenStation.id,false);
+        this.setStationBlur(this.#chosenStation.id, false);
         let trainsArr = Array.from(this.#trains.values());
         let stations = trainsArr.filter(x => x instanceof (JoinedTrain));
 
@@ -145,66 +189,68 @@ class Game {
         $("#signOverlay").show();
     }
 
-    setStationBlur(id,on){
-        if(on){
+    setStationBlur(id, on) {
+        if (on) {
 
             SVG.find('.small-station-' + id).css({
                 transition: 'filter 1s easeIn',
-                filter:'drop-shadow(4px 4px 10px #ff0000) drop-shadow(-4px -4px 10px #ff0000)'});
+                filter: 'drop-shadow(4px 4px 10px #ff0000) drop-shadow(-4px -4px 10px #ff0000)'
+            });
 
             SVG.find('.big-station-' + id).css({
                 transition: 'filter 1s',
-                filter:'drop-shadow(4px 4px 10px #ff0000) drop-shadow(-4px -4px 10px #ff0000)'});
+                filter: 'drop-shadow(4px 4px 10px #ff0000) drop-shadow(-4px -4px 10px #ff0000)'
+            });
 
-        }else{
+        } else {
             SVG.find('.small-station-' + id).css('filter', null);
             SVG.find('.big-station-' + id).css('filter', null);
         }
 
     }
-    checkUnconnectedTrains(station){
+    checkUnconnectedTrains(station) {
 
-        let unconnectedStations=Array.from(this.#levelsMap.values()).flat();
-        if(station==null){
+        let unconnectedStations = Array.from(this.#levelsMap.values()).flat();
+        if (station == null) {
             console.log(unconnectedStations);
-            station=unconnectedStations[unconnectedStations];
+            station = unconnectedStations[unconnectedStations];
         }
-        unconnectedStations= unconnectedStations.filter(
-            station=> (station.connected==false||(station.bigStation==true&&station.sign=="")) );
+        unconnectedStations = unconnectedStations.filter(
+            station => (station.connected == false || (station.bigStation == true && station.sign == "")));
 
-        unconnectedStations= unconnectedStations.filter(
-            unconnectedStation=>unconnectedStation.level<station.level);
+        unconnectedStations = unconnectedStations.filter(
+            unconnectedStation => unconnectedStation.level < station.level);
 
-        if(unconnectedStations.length>0){
+        if (unconnectedStations.length > 0) {
 
-            let minLevel= Math.min(...unconnectedStations.map(unconnectedStation=>unconnectedStation.level));
+            let minLevel = Math.min(...unconnectedStations.map(unconnectedStation => unconnectedStation.level));
             console.log(minLevel);
 
             //console.log(unconnectedStations);
 
             //console.log(minLevel);
-            unconnectedStations=unconnectedStations.filter(unconnectedStation=>unconnectedStation.level==minLevel);
-            unconnectedStations.forEach(unconnectedStation => this.setStationBlur(unconnectedStation.id,true));
+            unconnectedStations = unconnectedStations.filter(unconnectedStation => unconnectedStation.level == minLevel);
+            unconnectedStations.forEach(unconnectedStation => this.setStationBlur(unconnectedStation.id, true));
             return true;
         }
         else return false;
     }
     #connectTrains(station) {
 
-        if(this.checkUnconnectedTrains(station)){
+        if (this.checkUnconnectedTrains(station)) {
             return;
         }
-        this.#levelsMap.get(station.level).forEach(stationAtLevel=>{
-            if(!stationAtLevel.connected){
+        this.#levelsMap.get(station.level).forEach(stationAtLevel => {
+            if (!stationAtLevel.connected) {
                 this.connectStation(stationAtLevel)
             }
-            }
+        }
         );
         this.connectStation(station)
         this.#showSignButtons(station);
     }
-    connectStation(station){
-        let targetTrainId=station.id;
+    connectStation(station) {
+        let targetTrainId = station.id;
         let targetTrain = this.#trains.get(targetTrainId);
         let targetLevel = targetTrain.level;
 
@@ -243,13 +289,14 @@ class Game {
         let trainsArr = Array.from(this.#trains.values());
         let stations = trainsArr.filter(x => x instanceof (JoinedTrain));
         this.#drawStations(stations);
-        console.log('adjacentTrains.length '+ adjacentTrains.length);
-        adjacentTrains.forEach(adjacentTrain=>{
+        console.log('adjacentTrains.length ' + adjacentTrains.length);
+        adjacentTrains.forEach(adjacentTrain => {
             adjacentTrain.animatedTrains.forEach(element => {
                 element.setupPath(adjacentTrain.id);
-            });}
+            });
+        }
         );
-        station.connected=true;
+        station.connected = true;
     }
     #drawElements() {
         this.#clearCanvas();
@@ -286,7 +333,7 @@ class Game {
 
             //bottom rail
             //middle
-            group.path('M' + start.x + ' ' + (start.y + 15) + ' S ' + target.x / 1.15 + ' ' + (target.y + 15) + ', ' + target.x + ' ' + (target.y + 15)).stroke({ width: 1, color: "transparent", linecap: "round" }).fill('none').id('centerline'+startId);
+            group.path('M' + start.x + ' ' + (start.y + 15) + ' S ' + target.x / 1.15 + ' ' + (target.y + 15) + ', ' + target.x + ' ' + (target.y + 15)).stroke({ width: 1, color: "transparent", linecap: "round" }).fill('none').id('centerline' + startId);
 
             //top rail
             SVG.find('.station-' + targetId).before(group);
@@ -300,15 +347,15 @@ class Game {
     #drawTrains(trains) {
         // drawing loks (https://svgjs.com/docs/3.0/getting-started/)
         for (let i = 0; i < trains.length; i++) {
-            let lokOffset=100;
+            let lokOffset = 100;
             let train = trains[i];
             let x = train.position.x;
             let y = train.position.y;
-            let cargoGroup = this.#draw.image('./assets/cart-'+train.value%10+'.png').height(36).width(100);
-            cargoGroup.attr({ x:  train.position.x +100 - lokOffset, y: train.position.y });
+            let cargoGroup = this.#draw.image('./assets/cart-' + train.value % 10 + '.png').height(36).width(100);
+            cargoGroup.attr({ x: train.position.x + 100 - lokOffset, y: train.position.y });
             cargoGroup.css('overflow', 'visible');
-           
-                       //img offset
+
+            //img offset
             //cargo.attr({ x:  0, y: -36});
 
             train.cargoTrains.push(cargoGroup);
@@ -319,20 +366,20 @@ class Game {
             lok.css('overflow', 'visible')
 
             lok.image('./assets/locomotive.png').height(40).width(100);
-            group.attr({ x:  train.position.x+100,  y: train.position.y });
+            group.attr({ x: train.position.x + 100, y: train.position.y });
             //img offset height=36px
             //img.attr({ x:  -50, y: 0});
-            let valueText=lok.group();
+            let valueText = lok.group();
             //valueText.rect(20,20).fill('#ffffff').move(8,8);
             valueText.text(String(train.value)).font({
                 family: 'Helvetica',
                 weight: 'bold'
                 , size: 16,
-                 anchor:   'middle'
+                anchor: 'middle'
 
-                , leading: '1.5em',fill: '#ffffff'
-            }).move(8,8);
-            train.group=group;
+                , leading: '1.5em', fill: '#ffffff'
+            }).move(8, 8);
+            train.group = group;
 
             if (train instanceof JoinedTrain) {
                 group.hide();
@@ -353,7 +400,7 @@ class Game {
             let group = this.#draw.group();
             group.addClass('station');
             if (station.subTrains.length == 2) {
-                station.bigStation=true;
+                station.bigStation = true;
                 group.addClass('big-station-' + station.id);
                 group.on('click', function () { this.#showSignButtons(station) }.bind(this));
                 group.svg(stationBigSVG).move(station.position.x - 70, station.position.y - 70);
@@ -372,7 +419,7 @@ class Game {
                 }).move(signPosition.x, signPosition.y);
 
             } else {
-                station.bigStation=false;
+                station.bigStation = false;
 
                 group.on('click', function () { this.#connectTrains(station); }.bind(this));
                 group.addClass('small-station-' + station.id);
@@ -380,16 +427,16 @@ class Game {
             }
         }
     }
-    drawCows(){
-        let solution=eval(this.#equation);
+    drawCows() {
+        let solution = eval(this.#equation);
 
         for (let i = 0; i < solution; i++) {
-            let coordinates= this.getRandomCowPosition();
-            this.#draw.image('./assets/cow.png').dx(coordinates.x+'%').dy(coordinates.y+'%').rotate(Math.floor(Math.random()*350));
+            let coordinates = this.getRandomCowPosition();
+            this.#draw.image('./assets/cow.png').dx(coordinates.x + '%').dy(coordinates.y + '%').rotate(Math.floor(Math.random() * 350));
         }
     }
-    getRandomCowPosition(){
-        return {x:90-Math.round(Math.random()*40),y:90-Math.round(Math.random()*80)};
+    getRandomCowPosition() {
+        return { x: 90 - Math.round(Math.random() * 30), y: 90 - Math.round(Math.random() * 80) };
     };
     // TODO clear canvas
     #clearCanvas() {
@@ -417,10 +464,10 @@ class Game {
 
     startPlayMode() {
 
-        if(this.checkUnconnectedTrains(null)){
+        if (this.checkUnconnectedTrains(null)) {
             return;
         }
-        
+
         $("#disablingActionsOverlay").show();
 
         // creates now as well joined trains
@@ -436,19 +483,19 @@ class Game {
         }
 
         let finalTrain = this.#trains.get(this.#levelsMap.size - 1),
-        duration = 3500,
-        delay = 0,
-        totalDuration=0;
-        finalTrain.finaltrain=true;
+            duration = 3500,
+            delay = 0,
+            totalDuration = 0;
+        finalTrain.finaltrain = true;
 
         // firstly trains from level 0 goes, later level 1, 2 ...
         for (let i = 1; i < this.#levelsMap.size; i++) {
-            console.log( 'moving '+this.#levelsMap.get(i).length + ' joinedTrains' )
+            console.log('moving ' + this.#levelsMap.get(i).length + ' joinedTrains')
             this.#levelsMap.get(i).forEach(train => {
-                console.log( 'moving '+train.subTrains.length + ' subTrains' )
+                console.log('moving ' + train.subTrains.length + ' subTrains')
 
                 train.subTrains.forEach(subtrain => {
-                
+
                     subtrain.move(train.position, duration - 1500, delay);
                     $('#result').text(train.eqString);
                     console.log('Subequation: ' + train.eqString);
@@ -456,47 +503,78 @@ class Game {
 
             });
             delay += duration - 500;
-            totalDuration+=duration+delay;
+            totalDuration += duration + delay;
 
         }
-        let result="";
+        let result = eval(this.#equation);
         // check solution correctness 
-        if (eval(this.#equation) == finalTrain.value) {
-            this.#points = this.#points + 10;
-            result="Correct!";
-            console.log("Correct!");
-            // TODO feedback popup 
-        } else {
-            result="Incorrect!";
-            console.log("Incorrect!");
-            // TODO explosion
-        }
 
-        let points = this.#points;
+
+
+        let displayPoints=this.#points;
 
         setTimeout(function () {
             finalTrain.move({ x: finalTrain.position.x + 250, y: finalTrain.position.y }, duration, 0);
-            $('#result').append("=" + finalTrain.value);
-            $('#points').text(points);
+
+            $('.goodHay>img').css("transform", "scale(1.5)");
+                setTimeout(function(){
+                    $('.goodHay>img').css("transform", "scale(1)");
+                    let goodHay=setGoodHay(finalTrain.value, result);
+                },200)
+
+            $('.sadcow>img').css("transform", "scale(1.5)");
             setTimeout(function(){
-                alert(result);
-            },duration);
+                let sadCows=setSadCows(finalTrain.value, result);
+                displayPoints -= sadCows*5;
+                setPoints(displayPoints);
+                $('.sadcow>img').css("transform", "scale(1)");
+                $('.happycow>img').css("transform", "scale(1.5)");
+                $('.badHay>img').css("transform", "scale(1.5)");
+                setTimeout(function(){
+                    let badHay=setBadHay(finalTrain.value, result);
+                    displayPoints -= badHay*5;
+
+                    $('.badHay>img').css("transform", "scale(1)");
+                    
+                },200);
+                setTimeout(function(){
+                    let happyCows= setHappyCows(finalTrain.value, result);
+                    if(finalTrain.value=== result){
+                        displayPoints += happyCows*5;
+                    }
+                    $('.happycow>img').css("transform", "scale(1)");
+                    setPoints(displayPoints);
+
+                },200);
+            },200);
+
+
+            
+
+
+
         }, delay);
+        this.#points=displayPoints;
+
     }
+
 }
 
 // version with the whole equation
 class GameVersion1 extends Game {
     constructor() {
         super();
-        
+
     }
 
     loadEquation(equation) {
         super.loadEquation(equation);
-        let rightSide=equation.match(/[=].*\d+/g)[0];
-        let leftSide=equation.replace(rightSide,'');
+        let rightSide = equation.match(/[=].*\d+/g)[0];
+        let leftSide = equation.replace(rightSide, '');
         $('#target').text(leftSide + "=" + eval(leftSide));
+        $('.sadcow>p').text(eval(leftSide) + 'x');
+        $('.goodhay>p').text('0 x');
+
     }
 }
 
