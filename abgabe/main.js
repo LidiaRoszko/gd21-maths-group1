@@ -572,9 +572,10 @@ class GameVersion1 extends Game {
         let rightSide = equation.match(/[=].*\d+/g)[0];
         let leftSide = equation.replace(rightSide, '');
         $('#target').text(leftSide + "=" + eval(leftSide));
-        $('.sadcow>p').text(eval(leftSide) + 'x');
-        $('.goodhay>p').text('0 x');
-
+        $('.sadcow>p').text(eval(leftSide) + 'x').css('color','black');
+        $('.goodhay>p').text('0 x').css('color','black');;
+        $('.happycow>p').text('0 x').css('color','black');;
+        $('.badhay>p').text('0 x').css('color','black');;
     }
 }
 
