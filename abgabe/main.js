@@ -351,14 +351,34 @@ class Game {
             let train = trains[i];
             let x = train.position.x;
             let y = train.position.y;
-            let cargoGroup = this.#draw.image('./assets/cart-' + train.value % 10 + '.png').height(36).width(100);
-            cargoGroup.attr({ x: train.position.x + 100 - lokOffset, y: train.position.y });
-            cargoGroup.css('overflow', 'visible');
+            let hayToTransport=train.value;
+            if(hayToTransport<0){
+                hayToTransport=0;
+            }
+            let numberOfWagons=0;
+            train.cargoTrains=[];
 
+            while(hayToTransport>10){
+                numberOfWagons++;
+                hayToTransport-=10;
+                let cargoGroup = this.#draw.image('./assets/cart-' + 10 + '.png').height(36).width(100);
+                cargoGroup.attr({ x: train.position.x + 100 - lokOffset*numberOfWagons, y: train.position.y });
+                cargoGroup.css('overflow', 'visible');
+                train.cargoTrains.push(cargoGroup);
+
+                if (train instanceof JoinedTrain) {
+                    cargoGroup.hide();
+                }
+            }
+            numberOfWagons++;
+            
+            let cargoGroup = this.#draw.image('./assets/cart-' + hayToTransport%10 + '.png').height(36).width(100);
+            cargoGroup.attr({ x: train.position.x + 100 - lokOffset*numberOfWagons, y: train.position.y });
+            cargoGroup.css('overflow', 'visible');
+            train.cargoTrains.push(cargoGroup);
             //img offset
             //cargo.attr({ x:  0, y: -36});
 
-            train.cargoTrains.push(cargoGroup);
             let group = this.#draw.nested();
             group.addClass('train-' + train.id);
             group.css('overflow', 'visible')
@@ -390,8 +410,6 @@ class Game {
     }
 
     #drawStations(stations) {
-        let stationSmallSVG = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="105px" height="69px" viewBox="-0.5 -0.5 105 69"><defs/><g><rect x="4" y="32.4" width="96" height="36" fill="#d9c4a0" stroke="none" pointer-events="all"/><path d="M 0 40.4 L 8 12.4 L 96 12.4 L 104 40.4 Z" fill="#3d2a26" stroke="none" pointer-events="all"/><path d="M 39.6 -22 L 63.6 12 L 39.6 46 Z" fill="#3d2a26" stroke="none" transform="rotate(-90,51.6,12)" pointer-events="all"/><ellipse cx="51.6" cy="24.4" rx="10" ry="10" fill="#ffffff" stroke="#000000" pointer-events="all"/><rect x="40.9" y="13.9" width="21.4" height="21" fill="none" stroke="none" pointer-events="all"/><path d="M 56.44 28.05 C 56.64 28.22 56.67 28.54 56.46 28.78 C 56.3 28.94 56.01 29.03 55.77 28.86 L 51.09 25.34 C 50.99 25.23 50.89 25.13 50.9 24.91 L 50.9 17.22 C 50.9 16.91 51.18 16.7 51.44 16.7 C 51.77 16.7 51.97 17 51.97 17.22 L 51.97 24.68 Z M 51.65 33.16 C 56.93 33.16 60.52 28.8 60.52 24.41 C 60.52 19.07 56.04 15.65 51.63 15.65 C 45.77 15.65 42.69 20.63 42.69 24.17 C 42.69 30.13 47.52 33.16 51.65 33.16 Z M 51.55 34.9 C 46.27 34.9 41.03 30.94 40.9 24.28 C 40.9 19.17 45.28 13.9 51.56 13.9 C 57.08 13.9 62.3 18.1 62.3 24.46 C 62.3 30.1 57.66 34.9 51.55 34.9 Z" fill="#000000" stroke="none" pointer-events="all"/><rect x="68" y="44.4" width="8" height="12" rx="1.2" ry="1.2" fill="#dae8fc" stroke="none" pointer-events="all"/><rect x="84" y="44.4" width="8" height="12" rx="1.2" ry="1.2" fill="#dae8fc" stroke="none" pointer-events="all"/><path d="M 39.6 47.2 Q 64.4 47.2 64.4 56 Q 64.4 64.8 39.6 64.8 Z" fill="#3d2a26" stroke="none" transform="rotate(-90,52,56)" pointer-events="all"/><rect x="12" y="44" width="8" height="12" rx="1.2" ry="1.2" fill="#dae8fc" stroke="none" pointer-events="all"/><rect x="28" y="44" width="8" height="12" rx="1.2" ry="1.2" fill="#dae8fc" stroke="none" pointer-events="all"/></g></svg>';
-        let stationBigSVG = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="157px" height="111px" viewBox="-0.5 -0.5 157 111"><defs/><g><path d="M 102.04 -11.27 L 129.94 13.85 L 102.04 38.97 Z" fill="#3d2a26" stroke="none" transform="rotate(-90,115.99,13.85)" pointer-events="all"/><rect x="84" y="41.6" width="64" height="68" fill="#d9c4a0" stroke="none" pointer-events="all"/><rect x="4" y="73.6" width="80.4" height="36" fill="#d9c4a0" stroke="none" pointer-events="all"/><path d="M 76 45.6 L 84 25.6 L 148 25.6 L 156 45.6 Z" fill="#3d2a26" stroke="none" pointer-events="all"/><ellipse cx="116" cy="28.2" rx="13.200000000000001" ry="13.200000000000001" fill="#ffffff" stroke="#000000" stroke-width="2" pointer-events="all"/><path d="M 0 81.6 L 8 61.6 L 84.4 61.6 L 92.4 81.6 Z" fill="#3d2a26" stroke="none" pointer-events="all"/><rect x="112" y="53.6" width="8" height="12" rx="1.2" ry="1.2" fill="#dae8fc" stroke="none" pointer-events="all"/><rect x="96" y="53.6" width="8" height="12" rx="1.2" ry="1.2" fill="#dae8fc" stroke="none" pointer-events="all"/><rect x="128" y="53.6" width="8" height="12" rx="1.2" ry="1.2" fill="#dae8fc" stroke="none" pointer-events="all"/><rect x="91.6" y="84.8" width="8" height="12" rx="1.2" ry="1.2" fill="#dae8fc" stroke="none" pointer-events="all"/><rect x="132" y="85.6" width="8" height="12" rx="1.2" ry="1.2" fill="#dae8fc" stroke="none" pointer-events="all"/><rect x="112" y="85.2" width="8" height="12" rx="1.2" ry="1.2" fill="#dae8fc" stroke="none" pointer-events="all"/><rect x="27.2" y="84.8" width="8" height="12" rx="1.2" ry="1.2" fill="#dae8fc" stroke="none" pointer-events="all"/><rect x="75.2" y="84.8" width="8" height="12" rx="1.2" ry="1.2" fill="#dae8fc" stroke="none" pointer-events="all"/><rect x="43.2" y="84.8" width="8" height="12" rx="1.2" ry="1.2" fill="#dae8fc" stroke="none" pointer-events="all"/><rect x="59.2" y="84.8" width="8" height="12" rx="1.2" ry="1.2" fill="#dae8fc" stroke="none" pointer-events="all"/><path d="M 102 85.6 Q 130 85.6 130 95.6 Q 130 105.6 102 105.6 Z" fill="#3d2a26" stroke="none" transform="rotate(-90,116,95.6)" pointer-events="all"/><rect x="12" y="84.8" width="8" height="12" rx="1.2" ry="1.2" fill="#dae8fc" stroke="none" pointer-events="all"/></g></svg>';
 
         for (let i = 0; i < stations.length; i++) {
             let station = stations[i];
@@ -403,7 +421,7 @@ class Game {
                 station.bigStation = true;
                 group.addClass('big-station-' + station.id);
                 group.on('click', function () { this.#showSignButtons(station) }.bind(this));
-                group.svg(stationBigSVG).move(station.position.x - 70, station.position.y - 70);
+                group.image('assets/bigStation.svg').move(station.position.x - 70, station.position.y - 70);
                 let signPosition;
                 switch (station.sign) {
                     case '*': signPosition = { x: station.position.x + 39, y: station.position.y - 56 }; break;
@@ -423,7 +441,7 @@ class Game {
 
                 group.on('click', function () { this.#connectTrains(station); }.bind(this));
                 group.addClass('small-station-' + station.id);
-                group.svg(stationSmallSVG).move(station.position.x - 30, station.position.y - 30);
+                group.image('assets/smallStation.svg').move(station.position.x - 30, station.position.y - 30);
             }
         }
     }

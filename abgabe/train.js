@@ -32,10 +32,19 @@ class Train {
     // TODO rotation of trains
     async move(target, duration, delay) {
         let result= await this.waitForSeconds(delay);
-        this.group.show();
 
-        this.group.first().first().attr({ x:  -50, y: -18});
-        this.group.first().last().attr({ x:  -50 + 15, y: 0});
+        let carts=this.group.children();
+        this.group.show();
+        this.group.first().children().forEach((child,index)=>{
+            if(index==0){
+                child.attr({ x:  -50, y: -18});
+
+            }else{
+                child.attr({ x:  -50 + 15, y: 0});
+
+            }
+        })
+
 
         //this.group.children()[this.group.children().length-1].attr({ x:  -50+15, y: 6});
 
@@ -45,16 +54,19 @@ class Train {
             //element.attr({ x:  0, y: 0});
         });
         console.log('level' + this.level);
-        
         let offset=17;
-        if(this.level>=1&&!this.finaltrain){
+
+    
+        if(!this.finaltrain){
             offset+=15;
         }
         this.animatedTrains.forEach((train,id)=>{       
             let animator=train.setupPath(this.id);
             let totaltrains=this.animatedTrains.length;
+            console.log('number of trains' + totaltrains);
             let start= (totaltrains-(id+1))*offset;
             let end=100-id*offset;
+            console.log(start,end);
             train.startAnimation(start,end,animator);
         });
     }
