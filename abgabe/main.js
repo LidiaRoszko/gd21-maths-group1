@@ -1,5 +1,5 @@
 function setSadCows(trainValue, solution) {
-    if (trainValue > solution) {
+    if (trainValue >= solution) {
         $('.sadcow>p').text(0 + 'x').css('color','green');
         return 0;
 
@@ -23,7 +23,7 @@ function setGoodHay(trainValue, solution) {
         $('.goodhay>p').text(trainValue + 'x');
 }
 function setBadHay(trainValue, solution) {
-    if (trainValue < solution) {
+    if (trainValue <= solution) {
         $('.badhay>p').text(0 + 'x').css('color','green');
         return 0;
 
@@ -501,9 +501,9 @@ class Game {
         if (this.checkUnconnectedTrains(null)) {
             return;
         }
-
         $("#disablingActionsOverlay").show();
-
+        $("#startButton").attr('disabled','disabled');
+        $("#nextButton").attr('disabled','disabled');
         // creates now as well joined trains
         this.drawElements();
 
@@ -578,6 +578,8 @@ class Game {
                     }
                     $('.happycow>img').css("transform", "scale(1)");
                     setPoints(displayPoints);
+                    $("#startButton").removeAttr('disabled');
+                    $("#nextButton").removeAttr('disabled');
 
                 },200);
             },200);
@@ -586,7 +588,7 @@ class Game {
             
 
 
-
+            
         }, delay);
         this.points=displayPoints;
 
