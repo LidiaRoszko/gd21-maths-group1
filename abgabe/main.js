@@ -64,9 +64,9 @@ class Game {
     #draw;
 
     #rails = [];
-
     #chosenStation;
     #currentLevel=1;
+
     constructor() {
         this.loadEquation(this.#equations[Math.round(Math.random()*this.#equations.length-1)]);
     }
@@ -118,6 +118,7 @@ class Game {
             }
         }
         this.#drawElements();
+        
     }
 
     // when on change event triggered
@@ -263,6 +264,7 @@ class Game {
         this.#drawTrains(startTrains);
 
         this.#drawStations(stations);
+        this.drawCows();
     }
 
     #drawRails(rails) {
@@ -378,6 +380,17 @@ class Game {
             }
         }
     }
+    drawCows(){
+        let solution=eval(this.#equation);
+
+        for (let i = 0; i < solution; i++) {
+            let coordinates= this.getRandomCowPosition();
+            this.#draw.image('./assets/cow.png').dx(coordinates.x+'%').dy(coordinates.y+'%').rotate(Math.floor(Math.random()*350));
+        }
+    }
+    getRandomCowPosition(){
+        return {x:90-Math.round(Math.random()*40),y:90-Math.round(Math.random()*80)};
+    };
     // TODO clear canvas
     #clearCanvas() {
         $('#canvas').html("");

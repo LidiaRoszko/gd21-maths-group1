@@ -18,8 +18,12 @@ class JoinedTrain extends Train {
 
     connectWith(train1, train2) {
         this.subTrains = [];
-        this.subTrains.push(train1);
-        this.subTrains.push(train2);
+            this.subTrains.push(train1);
+
+        
+            this.subTrains.push(train2);
+
+        
         this.visible = true;
         this.#calculate();
     }
@@ -35,13 +39,18 @@ class JoinedTrain extends Train {
 
     // after station added or connecting
     #calculate() {
-        if (this.sign.match(/^[*/+-]+$/) && this.subTrains.length == 2) {
+
+         if (this.sign.match(/^[*/+-]+$/) && this.subTrains.length == 2) {
             // right appearance in the equation
             this.subTrains.sort((x, y) => x.id - y.id);
 
             // not necessary brackets removed
             let train1 = this.subTrains[0];
             let train2 = this.subTrains[1];
+            let value1=train1.eqString;
+            let value2=train2.eqString;
+            console.log('value1 '+ value1);
+            console.log('value2 '+ value2);
             let ex1 = "(" + String(train1.eqString) + ")" + this.sign + "(" + String(train2.eqString) + ")";
             let ex2 = "(" + String(train1.eqString) + ")" + this.sign + String(train2.eqString);
             let ex3 = String(train1.eqString) + this.sign + "(" + String(train2.eqString) + ")";

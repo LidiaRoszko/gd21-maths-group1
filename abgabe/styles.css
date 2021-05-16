@@ -6,7 +6,7 @@ body {
 }
 
 #canvas {
-    background-image: url(assets/background-01.png);
+    background-image: url(assets/background.png);
     background-repeat: no-repeat;
     background-size: cover;
     height          : 930px;
