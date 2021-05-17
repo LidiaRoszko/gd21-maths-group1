@@ -91,6 +91,7 @@ class Train {
         let produceSteam = function (train){
             console.log(train.stopsmoke);
             if(train.visible==false||train.stopsmoke==true){
+                clearInterval(this);
                 return;
             }
             
