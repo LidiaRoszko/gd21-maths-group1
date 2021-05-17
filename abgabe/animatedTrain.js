@@ -1,7 +1,9 @@
 class AnimatedTrain{
-    constructor(element){
+    
+    constructor(element,train){
         this.element=element;
         this.pathAnimator=null;
+        this.train=train;
     }
 
     setupPath(trainId){
@@ -11,7 +13,8 @@ class AnimatedTrain{
             step     : step,
             easing   : function(t){ return t},
             onDone   :  this.finish,
-            element : this.element
+            element : this.element,
+            train:this.train
         })
 
     }
@@ -26,7 +29,10 @@ class AnimatedTrain{
     finish(){
         // do something when animation is done
         console.log('finished');
-        this.element.css('visibility', 'hidden');   
+        this.element.css('visibility', 'hidden'); 
+        this.train.moving=false;
+        this.train.visible=false;
+        //console.log(this.train)
     }
 }
 

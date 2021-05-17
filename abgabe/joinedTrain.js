@@ -46,8 +46,8 @@ class JoinedTrain extends Train {
             let train2 = this.subTrains[1];
             let value1=train1.eqString;
             let value2=train2.eqString;
-            console.log('value1 '+ value1);
-            console.log('value2 '+ value2);
+            //console.log('value1 '+ value1);
+            //console.log('value2 '+ value2);
             let ex1 = "(" + String(train1.eqString) + ")" + this.sign + "(" + String(train2.eqString) + ")";
             let ex2 = "(" + String(train1.eqString) + ")" + this.sign + String(train2.eqString);
             let ex3 = String(train1.eqString) + this.sign + "(" + String(train2.eqString) + ")";

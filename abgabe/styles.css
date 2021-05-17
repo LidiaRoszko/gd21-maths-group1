@@ -177,8 +177,8 @@ li {
     display: grid;
     grid-template-rows: 20% 30% 30% 20%;
     grid-template-columns: repeat(3, 1fr) auto;
-    grid-template-areas: ". sadcow happycow ."
-     "equation sadcow happycow points"
+    grid-template-areas: ". happycow sadcow."
+     "equation happycow sadcow points"
      "equation goodhay badhay points"
      "buttons goodhay badhay .";
 

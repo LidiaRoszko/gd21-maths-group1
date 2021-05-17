@@ -16,7 +16,8 @@ function PathAnimator( path, settings ){
         onDone       : settings.onDone || function(){},
         easing       : settings.easing,
         fps          : 1000/60, // frames-per-second
-        element: settings.element
+        element: settings.element,
+        train:settings.train
     }
 }
 

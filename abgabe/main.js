@@ -303,7 +303,7 @@ class Game {
         let stations = trainsArr.filter(x => x instanceof (JoinedTrain));
 
         this.drawStations(stations);
-        console.log('adjacentTrains.length '+ adjacentTrains.length);
+        //console.log('adjacentTrains.length '+ adjacentTrains.length);
         adjacentTrains.forEach(adjacentTrain=>{
             adjacentTrain.animatedTrains.forEach(element => {
                 element.setupPath(adjacentTrain.id);
@@ -314,6 +314,7 @@ class Game {
     }
     drawElements() {
         this.clearCanvas();
+        this.trains.forEach(train=>train.stopSmoke);
         this.draw = SVG().addTo('#canvas').size('100%', '100%');
 
         let trainsArr = Array.from(this.trains.values());
@@ -419,10 +420,13 @@ class Game {
                 , leading: '1.5em', fill: '#ffffff'
             }).move(8, 8);
             train.group = group;
+            train.stopSmoke=false;
+            train.startSteam(train);
 
             if (train instanceof JoinedTrain) {
                 group.hide();
                 cargoGroup.hide();
+                train.visible=false;
             }
             train.updateAnimatedTrains();
         }
@@ -531,15 +535,15 @@ class Game {
 
         // firstly trains from level 0 goes, later level 1, 2 ...
         for (let i = 1; i < this.levelsMap.size; i++) {
-            console.log( 'moving '+this.levelsMap.get(i).length + ' joinedTrains' )
+            //console.log( 'moving '+this.levelsMap.get(i).length + ' joinedTrains' )
             this.levelsMap.get(i).forEach(train => {
-                console.log( 'moving '+train.subTrains.length + ' subTrains' )
+                //console.log( 'moving '+train.subTrains.length + ' subTrains' )
 
                 train.subTrains.forEach(subtrain => {
 
                     subtrain.move(train.position, duration - 1500, delay);
                     $('#result').text(train.eqString);
-                    console.log('Subequation: ' + train.eqString);
+                    //console.log('Subequation: ' + train.eqString);
                 });
 
             });

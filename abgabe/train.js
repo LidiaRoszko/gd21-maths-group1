@@ -18,21 +18,26 @@ class Train {
         this.moving=false;
         this.animatedTrains=[];
         this.finaltrain=false;
+        this.stopsmoke=false;
     }
-
+    clear(){
+        this.group.remove();
+    }
     updateAnimatedTrains(){
         this.animatedTrains=[];
 
-        this.animatedTrains.push(new AnimatedTrain(this.group));
+        this.animatedTrains.push(new AnimatedTrain(this.group,this));
         this.cargoTrains.forEach(cargo=>{
-            this.animatedTrains.push(new AnimatedTrain(cargo));
+            this.animatedTrains.push(new AnimatedTrain(cargo,this));
         });
     }
       
     // TODO rotation of trains
     async move(target, duration, delay) {
-        let result= await this.waitForSeconds(delay);
 
+        let result= await this.waitForSeconds(delay);
+        this.moving=true;
+        this.visible=true;
         let carts=this.group.children();
         this.group.show();
         this.group.first().children().forEach((child,index)=>{
@@ -53,7 +58,7 @@ class Train {
             element.show();
             //element.attr({ x:  0, y: 0});
         });
-        console.log('level' + this.level);
+        //console.log('level' + this.level);
         let offset=17;
 
     
@@ -63,10 +68,10 @@ class Train {
         this.animatedTrains.forEach((train,id)=>{       
             let animator=train.setupPath(this.id);
             let totaltrains=this.animatedTrains.length;
-            console.log('number of trains' + totaltrains);
+            //console.log('number of trains' + totaltrains);
             let start= (totaltrains-(id+1))*offset;
             let end=100-id*offset;
-            console.log(start,end);
+            //console.log(start,end);
             train.startAnimation(start,end,animator);
         });
     }
@@ -79,6 +84,51 @@ class Train {
         });
       }
       
+    startSteam(train){
+        let counter=0;
+        let transform= train.group.transform();
+        let position={x:train.group.attr('x'),y:train.group.attr('y')};
+        let produceSteam = function (train){
+            console.log(train.stopsmoke);
+            if(train.visible==false||train.stopsmoke==true){
+                return;
+            }
+            
+            //console.log(counter);
+            if((counter%5)+1==1){
+                position={x:train.group.attr('x'),y:train.group.attr('y')};
+                transform= train.group.transform();
+            }
+            let addSmoke= function (number,position){
+                let smokeOffset={
+                    x:69,
+                    y:11
+                }
+        
+                let canvas=SVG.find('#canvas>svg')
+                let smoke;
+                if(train.moving){
+                    smoke=canvas.image(`./assets/smoke${number%5+1}.png`).x(position.x).y(position.y).transform(transform);
+
+                }else{
+                    smoke=canvas.image(`./assets/smoke${number%5+1}.png`).x(position.x+smokeOffset.x).y(position.y+smokeOffset.y).transform(transform);
+
+                }
+                return smoke;
+           }
+            let smoke = addSmoke(counter,position);
+            setTimeout(function () {
+               //console.log(smoke);
+                smoke.remove(); 
+            },200);
+            counter++;
+            // Your code here
+           }
+          
+        var intervalID = window.setInterval(function(){produceSteam(train)}, 200);
+
+
+    }
 
 }
 
