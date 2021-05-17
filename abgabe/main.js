@@ -375,7 +375,13 @@ class Game {
 
             while(hayToTransport>10){
                 numberOfWagons++;
-   
+                if(numberOfWagons>2){
+                    if (hayToTransport>10){
+                        hayToTransport= 10;
+
+                    }
+                    break;
+                }
                 hayToTransport-=10;
                 let cargoGroup = this.draw.image('./assets/cart-' + 10 + '.png').height(36).width(100);
                 cargoGroup.attr({ x: train.position.x + 100 - lokOffset*numberOfWagons, y: train.position.y });
