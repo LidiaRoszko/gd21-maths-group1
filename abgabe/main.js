@@ -570,14 +570,14 @@ class Game {
             $('.sadcow>img').css("transform", "scale(1.5)");
             setTimeout(function(){
                 let sadCows=setSadCows(finalTrain.value, result);
-                displayPoints -= sadCows*5;
-                setPoints(displayPoints);
+                //displayPoints -= sadCows*5;
+                //setPoints(displayPoints);
                 $('.sadcow>img').css("transform", "scale(1)");
                 $('.happycow>img').css("transform", "scale(1.5)");
                 $('.badHay>img').css("transform", "scale(1.5)");
                 setTimeout(function(){
                     let badHay=setBadHay(finalTrain.value, result);
-                    displayPoints -= badHay*5;
+                    //displayPoints -= badHay*5;
 
                     $('.badHay>img').css("transform", "scale(1)");
                     
@@ -585,7 +585,10 @@ class Game {
                 setTimeout(function(){
                     let happyCows= setHappyCows(finalTrain.value, result);
                     if(finalTrain.value=== result){
-                        displayPoints += happyCows*5;
+                        //displayPoints += happyCows*5;
+                        displayPoints+=10;
+                    }else{
+                        displayPoints-=5;
                     }
                     $('.happycow>img').css("transform", "scale(1)");
                     setPoints(displayPoints);
