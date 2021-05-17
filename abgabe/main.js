@@ -294,7 +294,6 @@ class Game {
             rails.push({ start: targetTrain.position, target: { x: targetTrain.position.x + 500, y: targetTrain.position.y }, startId: targetTrainId, targetId: targetTrainId })
         }
 
-        this.drawRails(rails);
 
         this.rails = this.rails.concat(rails).flat();
 
@@ -302,7 +301,6 @@ class Game {
         let trainsArr = Array.from(this.trains.values());
         let stations = trainsArr.filter(x => x instanceof (JoinedTrain));
 
-        this.drawStations(stations);
         //console.log('adjacentTrains.length '+ adjacentTrains.length);
         adjacentTrains.forEach(adjacentTrain=>{
             adjacentTrain.animatedTrains.forEach(element => {
@@ -311,6 +309,7 @@ class Game {
         }
         );
         station.connected = true;
+        this.drawElements();
     }
     drawElements() {
         this.clearCanvas();
@@ -376,6 +375,7 @@ class Game {
 
             while(hayToTransport>10){
                 numberOfWagons++;
+   
                 hayToTransport-=10;
                 let cargoGroup = this.draw.image('./assets/cart-' + 10 + '.png').height(36).width(100);
                 cargoGroup.attr({ x: train.position.x + 100 - lokOffset*numberOfWagons, y: train.position.y });
@@ -421,7 +421,6 @@ class Game {
             }).move(8, 8);
             train.group = group;
             train.stopSmoke=false;
-            train.startSteam(train);
 
             if (train instanceof JoinedTrain) {
                 group.hide();
@@ -507,7 +506,7 @@ class Game {
         console.log("Hint for user should be displayed!");
     }
 
-    startPlayMode() {
+    async startPlayMode() {
 
         if (this.checkUnconnectedTrains(null)) {
             return;
@@ -553,12 +552,18 @@ class Game {
         }
         let result = eval(this.equation);
         // check solution correctness 
+        
 
 
-
-        let displayPoints=this.points;
-
-        setTimeout(function () {
+        
+        if(finalTrain.value===eval(this.equation)){
+            //displayPoints += happyCows*5;
+            this.points+=10;
+        }else{
+            this.points-=5;
+        }
+        let newPoints=this.points;
+        let updateScore= await setTimeout(function () {
             finalTrain.move({ x: finalTrain.position.x + 250, y: finalTrain.position.y }, duration, 0);
 
             $('.goodHay>img').css("transform", "scale(1.5)");
@@ -584,14 +589,12 @@ class Game {
                 },200);
                 setTimeout(function(){
                     let happyCows= setHappyCows(finalTrain.value, result);
-                    if(finalTrain.value=== result){
-                        //displayPoints += happyCows*5;
-                        displayPoints+=10;
-                    }else{
-                        displayPoints-=5;
-                    }
+
                     $('.happycow>img').css("transform", "scale(1)");
-                    setPoints(displayPoints);
+
+                    setPoints(newPoints);
+
+
                     $("#startButton").removeAttr('disabled');
                     $("#nextButton").removeAttr('disabled');
 
@@ -604,7 +607,7 @@ class Game {
 
             
         }, delay);
-        this.points=displayPoints;
+
 
     }
 

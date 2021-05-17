@@ -19,6 +19,7 @@ class Train {
         this.animatedTrains=[];
         this.finaltrain=false;
         this.stopsmoke=false;
+        this.smoking=false;
     }
     clear(){
         this.group.remove();
@@ -36,8 +37,7 @@ class Train {
     async move(target, duration, delay) {
 
         let result= await this.waitForSeconds(delay);
-        this.moving=true;
-        this.visible=true;
+
         let carts=this.group.children();
         this.group.show();
         this.group.first().children().forEach((child,index)=>{
@@ -85,13 +85,18 @@ class Train {
       }
       
     startSteam(train){
+        if(this.smoking==true){
+            return;
+        }
+        this.smoking=true;
         let counter=0;
         let transform= train.group.transform();
         let position={x:train.group.attr('x'),y:train.group.attr('y')};
         let produceSteam = function (train){
-            console.log(train.stopsmoke);
-            if(train.visible==false||train.stopsmoke==true){
-                clearInterval(this);
+            //console.log(train.stopsmoke);
+            if(train.stopsmoke==true){
+                console.log('stopping smoke');
+                clearInterval(intervalID);
                 return;
             }
             
@@ -109,10 +114,10 @@ class Train {
                 let canvas=SVG.find('#canvas>svg')
                 let smoke;
                 if(train.moving){
-                    smoke=canvas.image(`./assets/smoke${number%5+1}.png`).x(position.x).y(position.y).transform(transform);
+                    smoke=canvas.image(`./assets/smoke${number%5+1}.png`).x(position.x).y(position.y).transform(transform).css('visible',train.moving?'visible':'hidden');
 
                 }else{
-                    smoke=canvas.image(`./assets/smoke${number%5+1}.png`).x(position.x+smokeOffset.x).y(position.y+smokeOffset.y).transform(transform);
+                    smoke=canvas.image(`./assets/smoke${number%5+1}.png`).x(position.x+smokeOffset.x).y(position.y+smokeOffset.y).transform(transform).css('visible',train.moving?'visible':'hidden');;
 
                 }
                 return smoke;

@@ -70,7 +70,7 @@ PathAnimator.prototype = {
             // advance to the next point on the path
             that.timer = setTimeout( calc, that.settings.fps );
             // do one step ("frame")
-            that.settings.step( that.pointAt(that.percent), angle,  that.settings.element);
+            that.settings.step( that.pointAt(that.percent), angle,  that.settings.element,that.settings.train);
         })();
     },
 

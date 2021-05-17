@@ -31,13 +31,16 @@ class AnimatedTrain{
         console.log('finished');
         this.element.css('visibility', 'hidden'); 
         this.train.moving=false;
+        this.train.stopsmoke=true;
         this.train.visible=false;
         //console.log(this.train)
     }
 }
 
-function step( point, angle, element ){
-    
+function step( point, angle, element, train ){
+    train.moving=true;
+    train.startSteam(train);
+
     if(element.first()){
         element.center(point.x,point.y);
         element.first().rotate(angle -  element.first().transform().rotate);
