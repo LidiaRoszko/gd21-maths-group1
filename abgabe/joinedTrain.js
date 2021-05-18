@@ -62,6 +62,14 @@ class JoinedTrain extends Train {
             let train1 = this.subTrains[0];
             this.eqString = train1.eqString;
         }
-        this.value = eval(this.eqString);
+        if(Number.isNaN(Math.trunc(eval(this.eqString)))){
+            
+            this.value=0;
+        }else{
+            this.value = Math.trunc(eval(this.eqString));
+
+        }
+        console.log( this.value);
+
     }
 }

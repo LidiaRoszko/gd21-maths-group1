@@ -317,7 +317,7 @@ class Game {
         this.draw = SVG().addTo('#canvas').size('100%', '100%');
 
         let trainsArr = Array.from(this.trains.values());
-        let startTrains = trainsArr.filter(x => x.value);
+        let startTrains = trainsArr.filter(x => x.value||x.value==0);
         let stations = trainsArr.filter(x => x instanceof (JoinedTrain));
 
         this.drawRails(this.rails);
