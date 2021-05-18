@@ -32,7 +32,7 @@ class Train {
             angle = 335;
         } else {
             angle = 0;
-            offsetY = this.position.y;
+            offsetY = this.position.y - 10;
         }
 
         if (await this.waitForSeconds(delay, localTimeStamp)) {
