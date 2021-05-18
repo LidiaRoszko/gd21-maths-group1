@@ -1,79 +1,64 @@
-const cargos = ["waterTank.png", "stones.png", "logs.png"];
-
 class Train {
-    value; visible; id; eqString; position; level;
+    value; visible; id; position; level;
     constructor(id, value, position, level) {
         this.value = value;
         this.id = id;
         this.visible = true;
-        this.eqString = value;
         this.position = position;
         this.level = level;
-        this.cargo = cargos[Math.round(Math.random() * (cargos.length - 1))];
-        this.group = null;
-        this.rails = null;
-        this.path;
-        this.pathAnimation = null;
-        this.cargoTrains = [];
-        this.lok = null;
-        this.moving = false;
-        this.animatedTrains = [];
         this.finalTrain = false;
     }
 
-    updateAnimatedTrains() {
-        this.animatedTrains = [];
+    async move(target, duration, delay) {
+        let localTimeStamp = window.timestamp;
+        let trainHTML = $('.train-' + this.id)[0];
+        var trainSVG = SVG.find('.train-' + this.id);
 
-        this.animatedTrains.push(new AnimatedTrain(this.group));
-        this.cargoTrains.forEach(cargo => {
-            this.animatedTrains.push(new AnimatedTrain(cargo));
-        });
-    }
+        var path = SVG.find('.path-' + this.id)[0];
+        var length = path.length();
 
-    async move(delay) {
-        let result = await this.waitForSeconds(delay);
-        if (result) {
-            this.group.show();
+        var angle = 0;
+        var pathPoint = path.pointAt(0 * length);
+        var offsetY = pathPoint.y - 55;
 
-            this.group.first().first().attr({ x: -50, y: -18 });
-            this.group.first().last().attr({ x: -50 + 15, y: 0 });
-    
-            //this.group.children()[this.group.children().length-1].attr({ x:  -50+15, y: 6});
-    
-    
-            this.cargoTrains.forEach(element => {
-                element.show();
-                //element.attr({ x:  0, y: 0});
-            });
-            console.log('level' + this.level);
-    
-            let offset = 17;
-            if (this.level >= 1 && !this.finalTrain) {
-                offset += 15;
-            }
-            this.animatedTrains.forEach((train, id) => {
-                let animator = train.setupPath(this.id);
-                let totaltrains = this.animatedTrains.length;
-                let start = (totaltrains - (id + 1)) * offset;
-                let end = 100 - id * offset;
-                train.startAnimation(start, end, animator);
-            });
+        trainHTML.setAttribute('transform-box', "transformAttr");
+        trainHTML.setAttribute('transform-origin', pathPoint.x + "px " + pathPoint.y + "px");
+
+        // if the rails go down 
+        if (target.y - this.position.y > 0) {
+            angle = 25;
+            offsetY = offsetY + 7;
+        } else if (target.y - this.position.y < 0) {
+            angle = 335;
+        } else {
+            angle = 0;
+            offsetY = this.position.y;
         }
+
+        if (await this.waitForSeconds(delay, localTimeStamp)) {
+            for (var i = 0.0; i < duration; i = i + 2.5) { //adjusting pace
+                if (i / duration < 0.6) { //not going to far into the station
+                    if (await this.waitForSeconds(1, localTimeStamp)) {
+                        trainSVG.show();
+                        var x = path.pointAt(i / duration * length).x;
+                        var transformAttr = ' rotate(' + angle + '), translate(' + (x) + ', ' + offsetY + ')';
+                        trainHTML.setAttribute('transform', transformAttr);
+                    } else {
+                        trainSVG.hide();
+                        return;
+                    }
+                }
+            }
+        }
+        trainSVG.hide();
     }
 
-    waitForSeconds(duration) {
+    waitForSeconds(duration, localTimeStamp) {
         return new Promise(resolve => {
             setTimeout(() => {
-                console.log(window.isPlayModeActive);
-                if(window.isPlayModeActive) {
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
+                resolve((window.timestamp == localTimeStamp)); //action can be performed only if play mode active
             }, duration);
         });
     }
-
-
 }
 

@@ -47,44 +47,55 @@
   <div class="cp_section">
     <h2>Spiel "Ich verstehe nur Bahnhof!"</h2>
     <div class="game-box">
-      <br>
+      <div id="feedbackOverlay"></div>
+      <div class="overlay" id="infoOverlay">
+        <div>
+          <h3>
+            Die Kühe brauchen Futter!
+          </h3>
+          Verbinde die Züge mit den Stationen, um das Futter zu liefern.
+          Achtung! Pass auf die richtige Reihenfolge auf, sonst bleiben einige Kühe hungrig.
+          Wenn du zu viel Futter lieferst, dann wird das Futter schlecht.
+          <br>
+          <br>
+          Klicke auf die Stationen und wähle die passenden Rechenoperation aus.
+          Hast du alle Stationen verbunden, dann klicke auf 'Los geht's', um das Heu zu liefern.
+          <div id="startGameButton" class="game-button" onclick="game.hideStartInformation()">
+            Start ➤
+          </div>
+        </div>
+      </div>
       <div class="space-box">
-        <div id="startStopButton" class="game-button" onclick="game.startStopPlayMode()">Los geht's</div>
+        <div id="startStopButton" class="game-button" onClick="game.startStopPlayMode()">Los geht's</div>
         <div class="game-button" onclick="game.nextRound()">Nächste Runde</div>
       </div>
       <div class="space-box">
         <div class="game-text"><span id="points">0</span> Punkte</div>
         <span class="game-text">Ziel: <span id="target"></span></span>
-        <span class="game-text">Resultat: <span id="result"></span></span>
       </div>
       <div class="game">
         <div id="canvas">
         </div>
-        <div id="disablingActionsOverlay">
+        <div class="overlay" id="disablingActionsOverlay">
         </div>
-        <div id="signOverlay">
+        <div class="overlay" id="signOverlay">
         </div>
         <div id="signButtons">
-            <input type="button" value="+" class="sign-button" onclick="game.chooseSign('+')"/>
-            <input type="button" value="-" class="sign-button" onclick="game.chooseSign('-')"/>
-            <input type="button" value="*" class="sign-button" onclick="game.chooseSign('*')"/>
-            <input type="button" value="/" class="sign-button" onclick="game.chooseSign('/')"/>
+          <div class="sign-button" onclick="game.chooseSign('+')">+</div>
+          <div class="sign-button" onclick="game.chooseSign('-')">-</div>
+          <div class="sign-button" onclick="game.chooseSign('*')">*</div>
+          <div class="sign-button" onclick="game.chooseSign('/')">/</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- <div id="stations"></div> -->
-  <script src="pathAnimator.js">
-  </script>
-    <script src="animatedTrain.js">
-    </script>
   <script src="train.js">
   </script>
-    <script src="joinedTrain.js">
-    </script>
+  <script src="joinedTrain.js">
+  </script>
   <script src="main.js">
-  
+
   </script>
 </body>
 
