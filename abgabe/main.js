@@ -73,7 +73,7 @@ class Game {
     currentLevel = 1;
     constructor() {
         $("#infoOverlay").show();
-        this.loadEquation(this.equations[Math.round(Math.random() * this.equations.length - 1)]);
+        this.loadEquation(this.equations[Math.floor(Math.random() * this.equations.length)]);
     }
 
     // information about game
