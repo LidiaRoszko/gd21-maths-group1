@@ -88,6 +88,7 @@ class Game {
         if (correctValue == result) {
             text = result + " ist korrekt! Die Kühe sind froh!";
             $("#happyCow").show();
+            $('#startStopButton').hide();
         } else if (correctValue > result) {
             text = result + " ist nicht korrekt! Die Kühe sind hungrig!";
             $("#sadCow").show();
@@ -98,16 +99,6 @@ class Game {
         $('#feedbackOverlay').text(text);
         $("#disablingActionsOverlay").show();
         $('#feedbackOverlay').show();
-
-        setTimeout(function () {
-            if (this.isPlayModeActive) {
-                if (correctValue == result) {
-                    this.nextRound();
-                } else {
-                    this.stopPlayMode();
-                }
-            }
-        }.bind(this), 7000);
     }
 
     // loading of an equation & drawing trains and stations
@@ -446,6 +437,7 @@ class Game {
         $("#sadCow").hide();
         $("#illCow").hide();
         $("#happyCow").hide();
+        $('#startStopButton').show();
     }
 
     // loading the next round with a new equation
@@ -476,7 +468,7 @@ class Game {
 
     stopPlayMode() {
         window.timestamp = new Date;
-        this.isPlayModeActive = !this.isPlayModeActive;
+        this.isPlayModeActive = false;
         $("#startStopButton")[0].innerText = "Los geht's";
         $("#disablingActionsOverlay").hide();
         $('#feedbackOverlay').hide();
@@ -489,6 +481,7 @@ class Game {
             delay = 0,
             totalDuration = 0;
         finalTrain.finalTrain = true;
+        finalTrain.calculate();
 
         // check if everything is connected
         if (this.checkUnconnectedTrains()) {
@@ -498,7 +491,7 @@ class Game {
         window.timestamp = new Date;
         let localTimeStamp = window.timestamp;
 
-        this.isPlayModeActive = !this.isPlayModeActive;
+        this.isPlayModeActive = true;
 
         $("#startStopButton")[0].innerText = "Anhalten";
 
