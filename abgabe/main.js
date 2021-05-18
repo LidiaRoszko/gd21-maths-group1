@@ -87,10 +87,13 @@ class Game {
         let text = ""
         if (correctValue == result) {
             text = result + " ist korrekt! Die Kühe sind froh!";
+            $("#happyCow").show();
         } else if (correctValue > result) {
             text = result + " ist nicht korrekt! Die Kühe sind hungrig!";
+            $("#sadCow").show();
         } else {
             text = result + " ist nicht korrekt! Die Heu ist verdorben geworden!";
+            $("#illCow").show();
         }
         $('#feedbackOverlay').text(text);
         $("#disablingActionsOverlay").show();
@@ -439,6 +442,10 @@ class Game {
         $('#canvas').html("");
         $("#signButtons").hide();
         $("#signOverlay").hide();
+        
+        $("#sadCow").hide();
+        $("#illCow").hide();
+        $("#happyCow").hide();
     }
 
     // loading the next round with a new equation

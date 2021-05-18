@@ -44,6 +44,6 @@ class JoinedTrain extends Train {
         } else if (this.subTrains.length == 1) {
             this.value = this.subTrains[0].value;
         }
-        this.value = Math.floor(this.value);
+        this.value = Math.trunc(this.value);
     }
 }
