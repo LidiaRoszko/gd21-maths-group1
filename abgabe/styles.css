@@ -160,7 +160,7 @@ li {
 #infoOverlay {
     background-color: #000000d4;
     border-radius   : 5% 5% 0 0;
-    display         : block;
+    display         : none;
 }
 
 #signOverlay {
