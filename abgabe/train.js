@@ -35,8 +35,15 @@ class Train {
             offsetY = this.position.y - 10;
         }
 
+        var pace = 3;
+
+        // quicker for firefox
+        if (navigator.userAgent.indexOf("Firefox") != -1) {
+            pace = 7.5;
+        }
+
         if (await this.waitForSeconds(delay, localTimeStamp)) {
-            for (var i = 0.0; i < duration; i = i + 2.5) { //adjusting pace
+            for (var i = 0.0; i < duration; i = i + pace) { //adjusting pace
                 if (i / duration < 0.6) { //not going to far into the station
                     if (await this.waitForSeconds(1, localTimeStamp)) {
                         trainSVG.show();

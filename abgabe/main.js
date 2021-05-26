@@ -200,6 +200,7 @@ class Game {
         }
 
     }
+
     checkUnconnectedTrains(station) {
         let unconnectedStations = Array.from(this.trains.values());
 
@@ -225,6 +226,7 @@ class Game {
         }
         else return false;
     }
+
     connectTrains(station) {
 
         if (this.checkUnconnectedTrains(station)) {
@@ -239,6 +241,7 @@ class Game {
         this.connectStation(station)
         this.showSignButtons(station);
     }
+
     connectStation(station) {
         let targetTrainId = station.id;
         let targetTrain = this.trains.get(targetTrainId);
@@ -309,7 +312,7 @@ class Game {
                 this.cowsPositions.push({ 'x': Math.floor(700 + 450 * Math.random()), 'y': Math.floor(5 + 100 * Math.random()) });
             }
         }
-        // drawing hay
+        // drawing cow
         for (let j = 0; j < eqValue; j++) {
             let cowPosition = this.cowsPositions[j];
             group.add(SVG(cowSVG).move(cowPosition.x, cowPosition.y))
@@ -407,11 +410,12 @@ class Game {
                 group.on('click', function () { this.showSignButtons(station) }.bind(this));
                 group.svg(stationBigSVG).move(station.position.x - 40, station.position.y - 55);
                 let signPosition;
+                let firefoxYOffset = (navigator.userAgent.indexOf("Firefox") != -1) ? 4 : 0; // signs in firefox are too high
                 switch (station.sign) {
-                    case '*': signPosition = { x: station.position.x + 71, y: station.position.y - 40 }; break;
-                    case '-': signPosition = { x: station.position.x + 74, y: station.position.y - 47 }; break;
-                    case '/': signPosition = { x: station.position.x + 73, y: station.position.y - 45 }; break;
-                    default: signPosition = { x: station.position.x + 70, y: station.position.y - 45 };
+                    case '*': signPosition = { x: station.position.x + 71, y: station.position.y - 40 + firefoxYOffset }; break;
+                    case '-': signPosition = { x: station.position.x + 74, y: station.position.y - 47 + firefoxYOffset }; break;
+                    case '/': signPosition = { x: station.position.x + 73, y: station.position.y - 45 + firefoxYOffset }; break;
+                    default: signPosition = { x: station.position.x + 70, y: station.position.y - 45 + firefoxYOffset };
                 }
                 group.text(station.sign).font({
                     family: 'Helvetica'
@@ -434,7 +438,7 @@ class Game {
         $('#canvas').html("");
         $("#signButtons").hide();
         $("#signOverlay").hide();
-        
+
         $("#sadCow").hide();
         $("#illCow").hide();
         $("#happyCow").hide();
