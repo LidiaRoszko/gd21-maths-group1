@@ -113,7 +113,7 @@ li {
     background-color: #47892f;
 }
 
-#signButtons {
+.sign-buttons {
     position     : absolute;
     width        : fit-content;
     display      : none;

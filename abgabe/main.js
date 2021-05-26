@@ -69,11 +69,27 @@ class Game {
 
     rails = [];
 
-    chosenStation;
     currentLevel = 1;
     constructor() {
         $("#infoOverlay").show();
+        this.createSignButtons();
         this.loadEquation(this.equations[Math.floor(Math.random() * this.equations.length)]);
+    }
+
+    // creating sign buttons for every possible station (max for 4 start trains -> 10 stations)
+    createSignButtons() {
+        let gameHTML = $(".game");
+        let signButtonsHTML = $(".sign-buttons");
+
+        for (let i = 0; i < 10; i++) {
+            let clone = signButtonsHTML.clone().attr("id", "signButtons" + i);
+            clone.appendTo(gameHTML);
+
+            $("#signButtons" + i + " .plus-button").click(function () { this.chooseSign(i, '+') }.bind(this));
+            $("#signButtons" + i + " .minus-button").click(function () { this.chooseSign(i, '-') }.bind(this));
+            $("#signButtons" + i + " .star-button").click(function () { this.chooseSign(i, '*') }.bind(this));
+            $("#signButtons" + i + " .slash-button").click(function () { this.chooseSign(i, '/') }.bind(this));
+        }
     }
 
     // information about game
@@ -158,27 +174,25 @@ class Game {
     }
 
     // when on change event triggered
-    chooseSign(sign) {
-        $("#signButtons").hide();
-        $("#signOverlay").hide();
+    chooseSign(chosenStationId, sign) {
 
-        this.chosenStation.updateSign(sign);
-        this.setStationBlur(this.chosenStation.id, false);
         let trainsArr = Array.from(this.trains.values());
         let stations = trainsArr.filter(x => x instanceof (JoinedTrain));
 
+        let chosenStation = stations.filter(x => x.id == chosenStationId)[0];
+
+        if (!chosenStation.bigStation) {
+            this.connectTrains(chosenStation);
+        }
+
+        if (this.checkUnconnectedTrains(chosenStation)) {
+            return;
+        }
+
+        chosenStation.updateSign(sign);
+        this.setStationBlur(chosenStationId, false);
+
         this.drawStations(stations);
-    }
-
-    showSignButtons(station) {
-
-        $("#signButtons").css("top", station.position.y + 60);
-        $("#signButtons").css("left", station.position.x - 100);
-        this.chosenStation = station;
-
-        // overlay for "forcing" user to choose sign and prevent problems when the chosen station is again small
-        $("#signButtons").show();
-        $("#signOverlay").show();
     }
 
     setStationBlur(id, on) {
@@ -238,8 +252,7 @@ class Game {
             }
         }
         );
-        this.connectStation(station)
-        this.showSignButtons(station);
+        this.connectStation(station);
     }
 
     connectStation(station) {
@@ -407,7 +420,6 @@ class Game {
             if (station.subTrains.length == 2) {
                 station.bigStation = true;
                 group.addClass('big-station-' + station.id);
-                group.on('click', function () { this.showSignButtons(station) }.bind(this));
                 group.svg(stationBigSVG).move(station.position.x - 40, station.position.y - 55);
                 let signPosition;
                 let firefoxYOffset = (navigator.userAgent.indexOf("Firefox") != -1) ? 4 : 0; // signs in firefox are too high
@@ -431,13 +443,17 @@ class Game {
                 group.addClass('small-station-' + station.id);
                 group.svg(stationSmallSVG).translate(station.position.x - 10, station.position.y - 10);
             }
+
+            // positioning and displaying sign buttons
+            $("#signButtons" + station.id).css("top", station.position.y + 60);
+            $("#signButtons" + station.id).css("left", station.position.x - 100);
+            $("#signButtons" + station.id).show();
         }
     }
 
     clearCanvas() {
         $('#canvas').html("");
-        $("#signButtons").hide();
-        $("#signOverlay").hide();
+        $(".sign-buttons").hide();
 
         $("#sadCow").hide();
         $("#illCow").hide();
@@ -505,6 +521,9 @@ class Game {
 
         // creates now as well joined trains
         this.drawElements();
+
+        // hide sign buttons
+        $(".sign-buttons").hide();
 
         // firstly trains from level 0 goes, later level 1, 2 ...
         for (let i = 1; i < this.levelsMap.size; i++) {
