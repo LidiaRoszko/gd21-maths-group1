@@ -304,6 +304,7 @@ class Game {
         let group = this.draw.group();
         let eqValue = eval(this.equation);
         if (this.cowsPositions.length != eqValue) {
+            this.cowsPositions = [];
             for (let j = 0; j < eqValue; j++) {
                 this.cowsPositions.push({ 'x': Math.floor(700 + 450 * Math.random()), 'y': Math.floor(5 + 100 * Math.random()) });
             }
