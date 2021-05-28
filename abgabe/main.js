@@ -9,7 +9,7 @@ class Game {
 '(    1    +    10    )    *    2    =    22',
 '(    2    +    12    )    /    2    =    7',
 '(    9    -    1    )    +    9    =    17',
-'(    13    -    10    )    -    5    =    -2',
+//'(    13    -    10    )    -    5    =    -2',
 '(    14    -    8    )    *    4    =    24',
 '(    11    -    3    )    /    4    =    2',
 '(    2    *    6    )    +    10    =    22',
@@ -490,6 +490,12 @@ class Game {
 
     // loading the next round with a new equation
     nextRound() {
+        //substracting points if round is skipped without getting it correct
+        if(this.streak==0){
+            this.points-=5;
+            DisplayPoints(-5);
+
+        }
         console.log("Next round")
         this.stopPlayMode();
         //$("#disablingActionsOverlay").hide();
@@ -572,7 +578,9 @@ class Game {
                 $("#disablingActionsOverlay").hide();
                 // check solution correctness 
                 if (eval(this.equation) == finalTrain.value) {
-                    this.points = this.points + 10* this.level;
+                    this.points = this.points + 10* (this.level+1);
+                    DisplayPoints(10* (this.level+1));
+                    
                     this.streak++;
                     this.badStreak=0;
                     if(this.streakthreshold[1]==this.streak){
@@ -599,7 +607,7 @@ class Game {
 
                     console.log("Incorrect!");
                     $("#startStopButton")[0].innerText = "Nochmal";
-
+                    DisplayPoints(-5);
                     this.points-=5;
                 }
 
@@ -658,3 +666,29 @@ console.log(game);
 
 such ids are needed for the correct final equation
 */
+
+function DisplayPoints(changedPoints){
+    var points = $("#points");
+    let color='red';
+    if(changedPoints>0){
+        color='green';
+    }
+    var newPoints = $("<span class='animPoints'>"+ changedPoints + "</span>").css({
+        'width': points.width(),
+        'height': points.height(),
+        'position': 'absolute',
+        'top': points.offset().top,
+        'left': points.offset().left,
+        'font-weight':'bold',
+        'font-size':'28 px',
+        'color': color
+
+    });
+    $('body').append(newPoints);
+    newPoints.animate({
+        opacity:0,
+        top: "-=50"
+    }, 1000,"linear", function() {
+        this.remove();
+      });
+}
