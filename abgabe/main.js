@@ -2,54 +2,79 @@ window.timestamp; // time of last play mode
 
 class Game {
     // all equations for the game TODO: Equations (numbers under 20 look still good)
-    equations = ['(15+9)+2=26',
-        '(6+13)-11=8',
-        '(1+10)*2=22',
-        '(2+12)/2=7',
-        '(9-1)+9=17',
-        '(13-10)-5=-2',
-        '(14-8)*4=24',
-        '(11-3)/4=2',
-        '(2*6)+10=22',
-        '(1*15)-7=8',
-        '(4*3)*2=24',
-        '(9*6)/3=18',
-        '(14/7)+5=7',
-        '(18/3)-2=4',
-        '(16/4)*5=20',
-        '(27/3)/3=3',
-        '6+(8+4)=18',
-        '3+(7-2)=8',
-        '5+(3*5)=20',
-        '7+(10/2)=12',
-        '10-(1+6)=3',
-        '8-(10-8)=6',
-        '15-(3*2)=9',
-        '13-(6/3)=11',
-        '5*(1+4)=25',
-        '12*(9-7)=24',
-        '5*(3*2)=30',
-        '12*(12/6)=24',
-        '12/(2+1)=4',
-        '15/(6-3)=5',
-        '24/(2*3)=4',
-        '30/(8/4)=15',
-        '11+3+7+2=23',
-        '4+1+11-5=11',
-        '5+13-3*4=5',
-        '12+2-15/5=11',
-        '13+2*4+3=24',
-        '5+10*1-7=8',
-        '10-6+3+2=9',
-        '11-4+12-9=10',
-        '(3+1)*(5+2)=21',
-        '(7+1)*(14-12)=16',
-        '7+(12/3)*2=15',
-    ];
+   equations = [[
+       //level 1
+'(    15    +    9    )    +    2    =    26',
+'(    6    +    13    )    -    11    =    8',
+'(    1    +    10    )    *    2    =    22',
+'(    2    +    12    )    /    2    =    7',
+'(    9    -    1    )    +    9    =    17',
+//'(    13    -    10    )    -    5    =    -2',
+'(    14    -    8    )    *    4    =    24',
+'(    11    -    3    )    /    4    =    2',
+'(    2    *    6    )    +    10    =    22',
+'(    1    *    15    )    -    7    =    8',
+'(    4    *    3    )    *    2    =    24',
+'(    9    *    6    )    /    3    =    18',
+'(    14    /    7    )    +    5    =    7',
+'(    18    /    3    )    -    2    =    4',
+'(    16    /    4    )    *    5    =    20',
+'(    27    /    3    )    /    3    =    3',
+'6    +    (    8    +    4    )    =    18',
+'3    +    (    7    -    2    )    =    8',
+'5    +    (    3    *    5    )    =    20',
+'7    +    (    10    /    2    )    =    12',
+'10    -    (    1    +    6    )    =    3',
+'8    -    (    10    -    8    )    =    6',
+'15    -    (    3    *    2    )    =    9',
+'13    -    (    6    /    3    )    =    11',
+'5    *    (    1    +    4    )    =    25',
+'12    *    (    9    -    7    )    =    24',
+'5    *    (    3    *    2    )    =    30',
+'12    *    (    12    /    6    )    =    24',
+'12    /    (    2    +    1    )    =    4',
+'15    /    (    6    -    3    )    =    5',
+'24    /    (    2    *    3    )    =    4',
+'30    /    (    8    /    4    )    =    15'],
+//level 2
+[
+    '3    +    12    +    10    =    25',
+    '8    +    14    -    3    =    19',
+    '5    +    8    *    2    =    11',
+    '12    +    9    /    3    =    15',
+    '10    -    6    +    13    =    17',
+    '15    -    4    -    5    =    6',
+    '20    -    6    *    3    =    2',
+    '19    -    12    /    4    =    16',
+    '13    *    2    +    2    =    28',
+    '4    *    5    -    13    =    7',
+    '2    *    3    *    3    =    18',
+    '3    *    4    /    2    =    6',
+    '14    /    7    +    25    =    27',
+    '15    /    3    -    4    =    1',
+    '3    +    2    +    14    =    19',
+    '26    +    3    -    18    =    11',
+    '22    +    4    *    2    =    30',
+    '1    +    8    /    4    =    3',
+    '17    -    15    +    28    =    30',
+    '26    -    8    -    13    =    5',
+    '24    -    4    *    5    =    4',
+    '22    -    18    /    6    =    19',
+    '2    *    6    +    14    =    26',
+    '3    *    8    -    4    =    20',
+    '4    *    3    *    2    =    24',
+    '4    *    9    /    3    =    12',
+    '20    /    4    +    5    =    10',
+    '30    /    3    -    2    =    8',
+]
+];
 
     // points received in total
     points = 0;
-
+    level = 0; 
+    streak=0;
+    badStreak=0;
+    streakthreshold=[2,3]
     /* equation specific params */
 
     // possible trains
@@ -73,7 +98,7 @@ class Game {
     constructor() {
         $("#infoOverlay").show();
         this.createSignButtons();
-        this.loadEquation(this.equations[Math.floor(Math.random() * this.equations.length)]);
+        this.loadEquation(this.equations[this.level][Math.floor(Math.random() * this.equations[this.level].length)]);
     }
 
     // creating sign buttons for every possible station (max for 4 start trains -> 10 stations)
@@ -102,19 +127,21 @@ class Game {
         let correctValue = eval(this.equation);
         let text = ""
         if (correctValue == result) {
-            text = result + " ist korrekt! Die Kühe sind froh!";
+            text = result + " ist korrekt! Die Kühe sind zufrieden!";
             $("#happyCow").show();
             $('#startStopButton').hide();
         } else if (correctValue > result) {
-            text = result + " ist nicht korrekt! Die Kühe sind hungrig!";
+            text = result + " stimmt leider nicht! Einige Kühe bleiben Hungrig";
             $("#sadCow").show();
         } else {
-            text = result + " ist nicht korrekt! Die Heu ist verdorben geworden!";
+            text = result + " stimmt leider nicht! Du hast zuviel geliefert und das Heu ist schlecht geworden.";
             $("#illCow").show();
         }
-        $('#feedbackOverlay').text(text);
-        $("#disablingActionsOverlay").show();
+        $('#feedbackOverlay>.feedBackContainer>p').text(text);
+        //$("#disablingActionsOverlay").show();
         $('#feedbackOverlay').show();
+        $('#feedbackNextButton').show();
+
     }
 
     // loading of an equation & drawing trains and stations
@@ -463,10 +490,16 @@ class Game {
 
     // loading the next round with a new equation
     nextRound() {
+        //substracting points if round is skipped without getting it correct
+        if(this.streak==0){
+            this.points-=5;
+            DisplayPoints(-5);
+
+        }
         console.log("Next round")
         this.stopPlayMode();
-        $("#disablingActionsOverlay").hide();
-        this.loadEquation(this.equations[Math.floor((this.equations.length - 1) * Math.random() + 1)]);
+        //$("#disablingActionsOverlay").hide();
+        this.loadEquation(this.equations[this.level][Math.floor((this.equations[this.level].length - 1) * Math.random() + 1)]);
     }
 
     // reloading the canvas
@@ -493,6 +526,8 @@ class Game {
         $("#startStopButton")[0].innerText = "Los geht's";
         $("#disablingActionsOverlay").hide();
         $('#feedbackOverlay').hide();
+        $('#feedbackNextButton').hide();
+
         this.drawElements();
     }
 
@@ -540,18 +575,52 @@ class Game {
         setTimeout(function () {
             if (this.isPlayModeActive && (localTimeStamp == window.timestamp)) {
                 let isCorrect = false;
+                $("#disablingActionsOverlay").hide();
                 // check solution correctness 
                 if (eval(this.equation) == finalTrain.value) {
-                    this.points = this.points + 10;
+                    this.points = this.points + 10* (this.level+1);
+                    DisplayPoints(10* (this.level+1));
+                    
+                    this.streak++;
+                    this.badStreak=0;
+                    if(this.streakthreshold[1]==this.streak){
+                        if(this.level<this.equations.length-1){
+                            this.level++;
+                        }
+                        this.streakthreshold[1]=this.streakthreshold[0]+this.streakthreshold[1];
+                        this.streakthreshold[0]=this.streakthreshold[1]-this.streakthreshold[0];
+                        this.streak=0;
+                    }
                     console.log("Correct!");
                     isCorrect = true;
                 } else {
+                    this.streak=0;
+                    this.badStreak++;
+
+                    /*if(level>0){
+                        this.level--;
+                        let oldstreakTop=this.streakthreshold[1];
+                        let oldstreakbtm=this.streakthreshold[0];
+                        this.streakthreshold[1]=this.streakthreshold[0];
+                        this.streakthreshold[0]=oldstreakBtm-(oldstreakTop-oldstreakbtm);
+                    }*/
+
                     console.log("Incorrect!");
+                    $("#startStopButton")[0].innerText = "Nochmal";
+                    DisplayPoints(-5);
+                    this.points-=5;
                 }
 
                 let points = this.points;
                 finalTrain.move({ x: finalTrain.position.x + 250, y: finalTrain.position.y }, duration, 0);
                 $('#points').text(points);
+                $('#level').text(`Level: ${this.level}`);
+                let progress=this.streak/(this.streakthreshold[1]/100);
+                console.log('progress: ' + progress)
+                $('.progressBar').width(`${progress}%`);
+                let badprogress=this.badStreak/(this.streakthreshold[0]/100);
+
+                $('.badProgressBar').width(`${badprogress}%`);
                 this.showFeedback(finalTrain.value);
             }
         }.bind(this), delay);
@@ -597,3 +666,29 @@ console.log(game);
 
 such ids are needed for the correct final equation
 */
+
+function DisplayPoints(changedPoints){
+    var points = $("#points");
+    let color='red';
+    if(changedPoints>0){
+        color='green';
+    }
+    var newPoints = $("<span class='animPoints'>"+ changedPoints + "</span>").css({
+        'width': points.width(),
+        'height': points.height(),
+        'position': 'absolute',
+        'top': points.offset().top,
+        'left': points.offset().left,
+        'font-weight':'bold',
+        'font-size':'28 px',
+        'color': color
+
+    });
+    $('body').append(newPoints);
+    newPoints.animate({
+        opacity:0,
+        top: "-=50"
+    }, 1000,"linear", function() {
+        this.remove();
+      });
+}

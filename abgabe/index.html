@@ -47,10 +47,18 @@
   <div class="cp_section">
     <h2>Spiel "Ich verstehe nur Bahnhof!"</h2>
     <div class="game-box">
-      <div id="feedbackOverlay"></div>
+      <div id="feedbackOverlay">
+        <div class="feedBackContainer">
+          <p></p>
+          <div class="game-button" id="feedbackNextButton" onclick="game.nextRound()">Nächste Runde</div>
+  
+  
+        </div>
+           </div>
       <img class="cow" id="happyCow" src="assets/1.svg">
       <img class="cow" id="illCow" src="assets/2.svg">
       <img class="cow" id="sadCow" src="assets/3.svg">
+
       <div class="overlay" id="infoOverlay">
         <div>
           <h3>
@@ -73,8 +81,13 @@
         <div class="game-button" onclick="game.nextRound()">Nächste Runde</div>
       </div>
       <div class="space-box">
-        <div class="game-text"><span id="points">0</span> Punkte</div>
+        <div class="game-text"><span id="level">Level: 0</span>  Punkte: <span id="points">0</span></div>
         <span class="game-text">Ziel: <span id="target"></span></span>
+      </div>
+      <div class="progressBarContainer">
+        
+        <div class="badProgressBar"></div>
+        <div class="progressBar"></div>
       </div>
       <div class="game">
         <div id="canvas">
