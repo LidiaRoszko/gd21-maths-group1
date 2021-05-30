@@ -494,6 +494,7 @@ class Game {
         if(this.streak==0){
             this.points-=5;
             DisplayPoints(-5);
+            $('#points').text(points);
 
         }
         console.log("Next round")
@@ -616,10 +617,15 @@ class Game {
                 $('#points').text(points);
                 $('#level').text(`Level: ${this.level}`);
                 let progress=this.streak/(this.streakthreshold[1]/100);
+                if(progress>100){
+                    progress=100;
+                }
                 console.log('progress: ' + progress)
                 $('.progressBar').width(`${progress}%`);
                 let badprogress=this.badStreak/(this.streakthreshold[0]/100);
-
+                if(badprogress>100){
+                    badprogress=100;
+                }
                 $('.badProgressBar').width(`${badprogress}%`);
                 this.showFeedback(finalTrain.value);
             }
