@@ -139,7 +139,7 @@ class Game {
             $('#feedbackNextButton').show();
 
         } else if (correctValue > result) {
-            text = result + " stimmt leider nicht! Einige Kühe bleiben Hungrig";
+            text = result + " stimmt leider nicht! Einige Kühe bleiben hungrig";
             $("#sadCow").show();
             $('#feedbackNextButton').click(null);
             $('#feedbackNextButton').click(() => this.stopPlayMode());
