@@ -490,13 +490,7 @@ class Game {
 
     // loading the next round with a new equation
     nextRound() {
-        //substracting points if round is skipped without getting it correct
-        if(this.streak==0){
-            this.points-=5;
-            DisplayPoints(-5);
-            $('#points').text(points);
 
-        }
         console.log("Next round")
         this.stopPlayMode();
         //$("#disablingActionsOverlay").hide();
