@@ -170,19 +170,15 @@ li {
     display : none;
     bottom  : 0;
     left    : 0;
-    color   : #000;
     width   : inherit;
 }
 
 #feedbackContainer {
     height          : 150px;
-    background-color: #c3c3c3;
+    background-color: #1b1b1b;
     font-size       : 25px;
     display         : flex
 }
-
-#feedbackLeftSide,
-#feedbackRightSide {}
 
 #feedbackRightSide {
     height    : fit-content;
@@ -196,8 +192,10 @@ li {
 }
 
 #feedbackLeftSide {
-    padding: 11px;
-    margin : auto;
+    padding      : 11px;
+    margin       : auto 20px;
+    border-radius: 100%;
+    background   : #ffffff70;
 }
 
 #feedbackLeftSide img {
