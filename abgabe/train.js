@@ -45,7 +45,7 @@ class Train {
 
         if (await this.waitForSeconds(delay, localTimeStamp)) {
             for (var i = 0.0; i < duration; i = i + pace) { //adjusting pace
-                if (i / duration < 0.6) { //not going to far into the station
+                if (i / duration < 0.55) { //not going to far into the station
                     if (await this.waitForSeconds(1, localTimeStamp)) {
                         trainSVG.show();
                         var x = path.pointAt(i / duration * length).x;

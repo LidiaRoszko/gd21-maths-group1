@@ -120,7 +120,7 @@ li {
     padding      : 7px 7px;
     border-radius: 10px;
     font-weight  : 700;
-    margin-left  : 40px;
+    margin-left  : 60px;
 }
 
 .sign-button {
@@ -129,11 +129,13 @@ li {
     height          : 25px;
     width           : 25px;
     cursor          : pointer;
-    margin          : 0 5px;
-    background-color: #1B1B1D;
+    margin          : 0;
+    background-color: #3d2a26;
+    border-radius   : 10px;
     display         : inline-block;
     padding         : 3px 3px 0;
-    border          : #dbdbdb 1px solid;
+    border          : #fff 1px solid;
+    color           : #fff;
 }
 
 .sign-button:hover {
@@ -159,15 +161,11 @@ li {
 #infoOverlay {
     background-color: #000000d4;
     border-radius   : 5% 5% 0 0;
-    display         : none;
-}
-
-#signOverlay {
-    background-color: #00000099;
+    display         : block;
 }
 
 #feedbackOverlay {
-    margin: 0 20px;
+    margin          : 0 20px;
     border-radius   : 10px 10px 0 0;
     position        : absolute;
     z-index         : 1;
@@ -221,47 +219,53 @@ li {
 #startGameButton:hover {
     background-color: #47892f;
 }
-.progressBarContainer{
-    position: relative;
-    width: 100%;
-    height: 10px;
+
+.progressBarContainer {
+    position        : relative;
+    width           : 100%;
+    height          : 10px;
     background-color: white;
 }
-.progressBar{
-    position: absolute;
-    top:0;
-    left:0;
-    height: 100%;
-    width: 10%;
+
+.progressBar {
+    position        : absolute;
+    top             : 0;
+    left            : 0;
+    height          : 100%;
+    width           : 10%;
     background-color: green;
-    transition: all .5s ease-out;
+    transition      : all .5s ease-out;
 }
-.badProgressBar{
-    position: absolute;
-    top:0;
-    left:0;
-    height: 100%;
-    width: 10%;
+
+.badProgressBar {
+    position        : absolute;
+    top             : 0;
+    left            : 0;
+    height          : 100%;
+    width           : 10%;
     background-color: red;
-    transition: all .5s ease-out;
+    transition      : all .5s ease-out;
 }
-#feedbackNextButton{
-    display: flex;
-    align-items: center;
-    margin: 0;
-    position: relative;
-    border-radius   : 10px 10px 10px 10px;
-    width: auto;
-    height: 50px;
-    color: white;
+
+#feedbackNextButton {
+    display      : flex;
+    align-items  : center;
+    margin       : 0;
+    position     : relative;
+    border-radius: 10px 10px 10px 10px;
+    width        : auto;
+    height       : 50px;
+    color        : white;
 }
-.feedBackContainer{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
+
+.feedBackContainer {
+    width          : 100%;
+    height         : 100%;
+    display        : flex;
+    align-items    : center;
     justify-content: space-around;
 }
-.feedBackContainer p{
+
+.feedBackContainer p {
     width: 75%;
 }

@@ -97,7 +97,9 @@ class Game {
 
     currentLevel = 1;
     constructor() {
-        $("#infoOverlay").show();
+        //if info popup should not be displayed
+        //$("#infoOverlay").hide(); 
+        
         this.createSignButtons();
         this.loadEquation(this.equations[this.level][Math.floor(Math.random() * this.equations[this.level].length)]);
     }
@@ -133,14 +135,14 @@ class Game {
             $('#startStopButton').hide();
             $('#feedbackNextButton').text("Nächste Runde");
             $('#feedbackNextButton').click(null);
-            $('#feedbackNextButton').click(()=>this.nextRound());
+            $('#feedbackNextButton').click(() => this.nextRound());
             $('#feedbackNextButton').show();
 
         } else if (correctValue > result) {
             text = result + " stimmt leider nicht! Einige Kühe bleiben Hungrig";
             $("#sadCow").show();
             $('#feedbackNextButton').click(null);
-            $('#feedbackNextButton').click(()=>this.stopPlayMode());
+            $('#feedbackNextButton').click(() => this.stopPlayMode());
             $('#feedbackNextButton').text("Nochmal Versuchen");
             $('#feedbackNextButton').show();
 
@@ -149,7 +151,7 @@ class Game {
             text = result + " stimmt leider nicht! Du hast zuviel geliefert und das Heu ist schlecht geworden.";
             $("#illCow").show();
             $('#feedbackNextButton').click(null);
-            $('#feedbackNextButton').click(()=>this.stopPlayMode());
+            $('#feedbackNextButton').click(() => this.stopPlayMode());
             $('#feedbackNextButton').text("Nochmal Versuchen");
             $('#feedbackNextButton').show();
         }
@@ -497,12 +499,12 @@ class Game {
 
                 group.on('click', function () { this.connectTrains(station); }.bind(this));
                 group.addClass('small-station-' + station.id);
-                group.svg(stationSmallSVG).translate(station.position.x - 10, station.position.y - 10);
+                group.svg(stationSmallSVG).translate(station.position.x - 15, station.position.y - 10);
             }
 
             // positioning and displaying sign buttons
             $("#signButtons" + station.id).css("top", station.position.y + 60);
-            $("#signButtons" + station.id).css("left", station.position.x - 100);
+            $("#signButtons" + station.id).css("left", station.position.x - 105);
             $("#signButtons" + station.id).show();
         }
     }
@@ -519,7 +521,7 @@ class Game {
 
     // loading the next round with a new equation
     nextRound() {
-        if(this.isPlayModeActive==true){
+        if (this.isPlayModeActive == true) {
             return;
         };
 
