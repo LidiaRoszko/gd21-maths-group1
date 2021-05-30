@@ -672,7 +672,7 @@ class GameVersion1 extends Game {
         super.loadEquation(equation);
         let rightSide = equation.match(/[=].*\d+/g)[0];
         let leftSide = equation.replace(rightSide, '');
-        $('#target').text(leftSide + "=" + eval(leftSide));
+        $('#target').text(leftSide + "= " + eval(leftSide));
     }
 }
 
