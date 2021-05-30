@@ -165,28 +165,31 @@ li {
 }
 
 #feedbackOverlay {
-    position: absolute;
-    z-index : 1;
-    display : none;
-    bottom  : 0;
-    left    : 0;
-    width   : inherit;
-}
-
-#feedbackContainer {
-    height          : 150px;
+    position        : absolute;
+    z-index         : 1;
+    display         : none;
+    bottom          : 0;
+    left            : 0;
+    width           : inherit;
     background-color: #1b1b1b;
     font-size       : 25px;
-    display         : flex
+}
+
+.feedback-container {
+    display   : flex;
+    height    : fit-content;
+    text-align: center;
+}
+
+#feedbackContainer2 {
+    display: none;
 }
 
 #feedbackRightSide {
-    height    : fit-content;
-    text-align: center;
-    margin    : auto;
+    margin: auto;
 }
 
-#feedbackText,
+.feedback-text,
 #feedbackNextButton {
     margin: 20px auto;
 }

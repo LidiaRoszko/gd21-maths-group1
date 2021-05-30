@@ -99,7 +99,7 @@ class Game {
     constructor() {
         //if info popup should not be displayed
         //$("#infoOverlay").hide(); 
-        
+
         this.createSignButtons();
         this.loadEquation(this.equations[this.level][Math.floor(Math.random() * this.equations[this.level].length)]);
     }
@@ -155,7 +155,7 @@ class Game {
             $('#feedbackNextButton').text("Nochmal Versuchen");
             $('#feedbackNextButton').show();
         }
-        $('#feedbackText').text(text);
+        $('#feedbackContainer1 .feedback-text').text(text);
         //$("#disablingActionsOverlay").show();
         $('#feedbackOverlay').show();
 
@@ -219,7 +219,6 @@ class Game {
 
     // when on change event triggered
     chooseSign(chosenStationId, sign) {
-
         let trainsArr = Array.from(this.trains.values());
         let stations = trainsArr.filter(x => x instanceof (JoinedTrain));
 
@@ -234,12 +233,12 @@ class Game {
         }
 
         chosenStation.updateSign(sign);
-        this.setStationBlur(chosenStationId, false);
+        this.setStationBlur(chosenStationId, false, null);
 
         this.drawStations(stations);
     }
 
-    setStationBlur(id, on) {
+    setStationBlur(id, on, noStationSign) {
         if (on) {
 
             SVG.find('.small-station-' + id).css({
@@ -252,7 +251,21 @@ class Game {
                 filter: 'drop-shadow(4px 4px 10px #ff0000) drop-shadow(-4px -4px 10px #ff0000)'
             });
 
+            $('#feedbackOverlay').show();
+            $('#feedbackContainer1').hide();
+            $('#feedbackContainer2').show();
+
+            if (noStationSign) {
+                $('#feedbackContainer2 .feedback-text').text("Wähle eine Rechenoperation!");
+            } else {
+                $('#feedbackContainer2 .feedback-text').text("Verbinde Züge!");
+            }
+
         } else {
+            $('#feedbackOverlay').hide();
+            $('#feedbackContainer1').show();
+            $('#feedbackContainer2').hide();
+
             SVG.find('.small-station-' + id).css('filter', null);
             SVG.find('.big-station-' + id).css('filter', null);
         }
@@ -273,20 +286,15 @@ class Game {
         }
         if (unconnectedStations.length > 0) {
             let minLevel = Math.min(...unconnectedStations.map(unconnectedStation => unconnectedStation.level));
-            console.log(minLevel);
-
-            //console.log(unconnectedStations);
-
-            //console.log(minLevel);
             unconnectedStations = unconnectedStations.filter(unconnectedStation => unconnectedStation.level == minLevel);
-            unconnectedStations.forEach(unconnectedStation => this.setStationBlur(unconnectedStation.id, true));
+
+            unconnectedStations.forEach(unconnectedStation => this.setStationBlur(unconnectedStation.id, true, (unconnectedStation.sign == "" && unconnectedStation.bigStation)));
             return true;
         }
         else return false;
     }
 
     connectTrains(station) {
-
         if (this.checkUnconnectedTrains(station)) {
             return;
         }
