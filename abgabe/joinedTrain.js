@@ -14,10 +14,14 @@ class JoinedTrain extends Train {
         this.calculate();
     }
 
-    connectWith(train1, train2) {
+    connectWith(trains) {
         this.subTrains = [];
-        this.subTrains.push(train1);
-        this.subTrains.push(train2);
+        this.subTrains.push(...trains);
+        
+        trains.forEach(train => {
+            train.connectedToStation=true;
+        });
+
         this.visible = true;
         this.calculate();
     }

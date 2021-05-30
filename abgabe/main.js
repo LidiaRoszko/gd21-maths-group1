@@ -2,79 +2,80 @@ window.timestamp; // time of last play mode
 
 class Game {
     // all equations for the game TODO: Equations (numbers under 20 look still good)
-   equations = [[
-       //level 1
-'(    15    +    9    )    +    2    =    26',
-'(    6    +    13    )    -    11    =    8',
-'(    1    +    10    )    *    2    =    22',
-'(    2    +    12    )    /    2    =    7',
-'(    9    -    1    )    +    9    =    17',
-//'(    13    -    10    )    -    5    =    -2',
-'(    14    -    8    )    *    4    =    24',
-'(    11    -    3    )    /    4    =    2',
-'(    2    *    6    )    +    10    =    22',
-'(    1    *    15    )    -    7    =    8',
-'(    4    *    3    )    *    2    =    24',
-'(    9    *    6    )    /    3    =    18',
-'(    14    /    7    )    +    5    =    7',
-'(    18    /    3    )    -    2    =    4',
-'(    16    /    4    )    *    5    =    20',
-'(    27    /    3    )    /    3    =    3',
-'6    +    (    8    +    4    )    =    18',
-'3    +    (    7    -    2    )    =    8',
-'5    +    (    3    *    5    )    =    20',
-'7    +    (    10    /    2    )    =    12',
-'10    -    (    1    +    6    )    =    3',
-'8    -    (    10    -    8    )    =    6',
-'15    -    (    3    *    2    )    =    9',
-'13    -    (    6    /    3    )    =    11',
-'5    *    (    1    +    4    )    =    25',
-'12    *    (    9    -    7    )    =    24',
-'5    *    (    3    *    2    )    =    30',
-'12    *    (    12    /    6    )    =    24',
-'12    /    (    2    +    1    )    =    4',
-'15    /    (    6    -    3    )    =    5',
-'24    /    (    2    *    3    )    =    4',
-'30    /    (    8    /    4    )    =    15'],
-//level 2
-[
-    '3    +    12    +    10    =    25',
-    '8    +    14    -    3    =    19',
-    '5    +    8    *    2    =    11',
-    '12    +    9    /    3    =    15',
-    '10    -    6    +    13    =    17',
-    '15    -    4    -    5    =    6',
-    '20    -    6    *    3    =    2',
-    '19    -    12    /    4    =    16',
-    '13    *    2    +    2    =    28',
-    '4    *    5    -    13    =    7',
-    '2    *    3    *    3    =    18',
-    '3    *    4    /    2    =    6',
-    '14    /    7    +    25    =    27',
-    '15    /    3    -    4    =    1',
-    '3    +    2    +    14    =    19',
-    '26    +    3    -    18    =    11',
-    '22    +    4    *    2    =    30',
-    '1    +    8    /    4    =    3',
-    '17    -    15    +    28    =    30',
-    '26    -    8    -    13    =    5',
-    '24    -    4    *    5    =    4',
-    '22    -    18    /    6    =    19',
-    '2    *    6    +    14    =    26',
-    '3    *    8    -    4    =    20',
-    '4    *    3    *    2    =    24',
-    '4    *    9    /    3    =    12',
-    '20    /    4    +    5    =    10',
-    '30    /    3    -    2    =    8',
-]
-];
+    equations = [[
+        //level 1
+        '(    15    +    9    )    +    2  +1  =    26',
+        '(    6    +    13    )    -    11    =    8',
+        '(    1    +    10    )    *    2    =    22',
+        '(    2    +    12    )    /    2    =    7',
+        '(    9    -    1    )    +    9    =    17',
+        //'(    13    -    10    )    -    5    =    -2',
+        '(    14    -    8    )    *    4    =    24',
+        '(    11    -    3    )    /    4    =    2',
+        '(    2    *    6    )    +    10    =    22',
+        '(    1    *    15    )    -    7    =    8',
+        '(    4    *    3    )    *    2    =    24',
+        '(    9    *    6    )    /    3    =    18',
+        '(    14    /    7    )    +    5    =    7',
+        '(    18    /    3    )    -    2    =    4',
+        '(    16    /    4    )    *    5    =    20',
+        '(    27    /    3    )    /    3    =    3',
+        '6    +    (    8    +    4    )    =    18',
+        '3    +    (    7    -    2    )    =    8',
+        '5    +    (    3    *    5    )    =    20',
+        '7    +    (    10    /    2    )    =    12',
+        '10    -    (    1    +    6    )    =    3',
+        '8    -    (    10    -    8    )    =    6',
+        '15    -    (    3    *    2    )    =    9',
+        '13    -    (    6    /    3    )    =    11',
+        '5    *    (    1    +    4    )    =    25',
+        '12    *    (    9    -    7    )    =    24',
+        '5    *    (    3    *    2    )    =    30',
+        '12    *    (    12    /    6    )    =    24',
+        '12    /    (    2    +    1    )    =    4',
+        '15    /    (    6    -    3    )    =    5',
+        '24    /    (    2    *    3    )    =    4',
+        '30    /    (    8    /    4    )    =    15'
+    ],
+    //level 2
+    [
+        '3    +    12    +    10    =    25',
+        '8    +    14    -    3    =    19',
+        '5    +    8    *    2    =    11',
+        '12    +    9    /    3    =    15',
+        '10    -    6    +    13    =    17',
+        '15    -    4    -    5    =    6',
+        '20    -    6    *    3    =    2',
+        '19    -    12    /    4    =    16',
+        '13    *    2    +    2    =    28',
+        '4    *    5    -    13    =    7',
+        '2    *    3    *    3    =    18',
+        '3    *    4    /    2    =    6',
+        '14    /    7    +    25    =    27',
+        '15    /    3    -    4    =    1',
+        '3    +    2    +    14    =    19',
+        '26    +    3    -    18    =    11',
+        '22    +    4    *    2    =    30',
+        '1    +    8    /    4    =    3',
+        '17    -    15    +    28    =    30',
+        '26    -    8    -    13    =    5',
+        '24    -    4    *    5    =    4',
+        '22    -    18    /    6    =    19',
+        '2    *    6    +    14    =    26',
+        '3    *    8    -    4    =    20',
+        '4    *    3    *    2    =    24',
+        '4    *    9    /    3    =    12',
+        '20    /    4    +    5    =    10',
+        '30    /    3    -    2    =    8',
+    ]
+    ];
 
     // points received in total
     points = 0;
-    level = 0; 
-    streak=0;
-    badStreak=0;
-    streakthreshold=[2,3]
+    level = 0;
+    streak = 0;
+    badStreak = 0;
+    streakthreshold = [2, 3]
     /* equation specific params */
 
     // possible trains
@@ -274,15 +275,13 @@ class Game {
             return;
         }
         this.levelsMap.get(station.level).forEach(stationAtLevel => {
-            if (!stationAtLevel.connected) {
-                this.connectStation(stationAtLevel)
-            }
+            this.connectStation(stationAtLevel, station.id)
         }
         );
-        this.connectStation(station);
+        this.connectStation(station, station.id);
     }
 
-    connectStation(station) {
+    connectStation(station, originId) {
         let targetTrainId = station.id;
         let targetTrain = this.trains.get(targetTrainId);
         let targetLevel = targetTrain.level;
@@ -291,24 +290,40 @@ class Game {
 
         // get 2 adjacent trains from the previous level
         let adjacentTrains = this.levelsMap.get(targetLevel - 1).filter((x, index) => (index == indexOfTargetTrain || index == indexOfTargetTrain + 1));
+        console.log(adjacentTrains);
+        if (targetTrainId > originId) {
+            adjacentTrains = [adjacentTrains[1]];
+            console.log(adjacentTrains);
 
-        // for each train from the target level disconnect 2 adjacent (to the target train) trains
-        this.levelsMap.get(targetLevel).forEach(train => {
-            train.disconnectFrom(adjacentTrains[0].id);
-            SVG.find('.rails-' + adjacentTrains[0].id + '-' + train.id).remove();
-            this.rails = this.rails.filter(x => !((x.startId == adjacentTrains[0].id)))
+        } else if (targetTrainId < originId) {
+            adjacentTrains = [adjacentTrains[0]];
+            console.log(adjacentTrains);
+        }
 
-            train.disconnectFrom(adjacentTrains[1].id);
-            SVG.find('.rails-' + adjacentTrains[1].id + '-' + train.id).remove();
-            this.rails = this.rails.filter(x => !((x.startId == adjacentTrains[1].id)))
+        adjacentTrains.forEach(adjacentTrain => {
+            this.levelsMap.get(targetLevel).forEach(train => {
+                train.disconnectFrom(adjacentTrain.id);
+                SVG.find('.rails-' + adjacentTrain.id + '-' + train.id).remove();
+                this.rails = this.rails.filter(x => !((x.startId == adjacentTrain.id)))
+            })
         })
 
+
+        // for each train from the target level disconnect 2 adjacent (to the target train) trains
+
+
         // connect target train with 2 adjacent trains
-        targetTrain.connectWith(adjacentTrains[0], adjacentTrains[1]);
+        targetTrain.connectWith(adjacentTrains);
 
         // add rails to access them later
-        let rails = [{ start: { x: adjacentTrains[0].position.x + 50, y: adjacentTrains[0].position.y }, target: targetTrain.position, startId: adjacentTrains[0].id, targetId: targetTrain.id }, { start: { x: adjacentTrains[1].position.x + 50, y: adjacentTrains[1].position.y }, target: targetTrain.position, startId: adjacentTrains[1].id, targetId: targetTrainId }];
+        let rails = [];
+        adjacentTrains.forEach(train => {
+            rails.push({
+                start: { x: train.position.x + 50, y: train.position.y },
+                target: targetTrain.position, startId: train.id, targetId: targetTrain.id
+            });
 
+        })
         // if the rails aim to final station
         if (this.levelsMap.size - 1 == targetTrainId) {
             rails.push({ start: targetTrain.position, target: { x: targetTrain.position.x + 500, y: targetTrain.position.y }, startId: targetTrainId, targetId: targetTrainId })
@@ -573,23 +588,23 @@ class Game {
                 $("#disablingActionsOverlay").hide();
                 // check solution correctness 
                 if (eval(this.equation) == finalTrain.value) {
-                    this.points = this.points + 10* (this.level+1);
-                    DisplayPoints(10* (this.level+1));
-                    
+                    this.points = this.points + 10 * (this.level + 1);
+                    DisplayPoints(10 * (this.level + 1));
+
                     this.streak++;
-                    this.badStreak=0;
-                    if(this.streakthreshold[1]==this.streak){
-                        if(this.level<this.equations.length-1){
+                    this.badStreak = 0;
+                    if (this.streakthreshold[1] == this.streak) {
+                        if (this.level < this.equations.length - 1) {
                             this.level++;
                         }
-                        this.streakthreshold[1]=this.streakthreshold[0]+this.streakthreshold[1];
-                        this.streakthreshold[0]=this.streakthreshold[1]-this.streakthreshold[0];
-                        this.streak=0;
+                        this.streakthreshold[1] = this.streakthreshold[0] + this.streakthreshold[1];
+                        this.streakthreshold[0] = this.streakthreshold[1] - this.streakthreshold[0];
+                        this.streak = 0;
                     }
                     console.log("Correct!");
                     isCorrect = true;
                 } else {
-                    this.streak=0;
+                    this.streak = 0;
                     this.badStreak++;
 
                     /*if(level>0){
@@ -603,22 +618,22 @@ class Game {
                     console.log("Incorrect!");
                     $("#startStopButton")[0].innerText = "Nochmal";
                     DisplayPoints(-5);
-                    this.points-=5;
+                    this.points -= 5;
                 }
 
                 let points = this.points;
                 finalTrain.move({ x: finalTrain.position.x + 250, y: finalTrain.position.y }, duration, 0);
                 $('#points').text(points);
                 $('#level').text(`Level: ${this.level}`);
-                let progress=this.streak/(this.streakthreshold[1]/100);
-                if(progress>100){
-                    progress=100;
+                let progress = this.streak / (this.streakthreshold[1] / 100);
+                if (progress > 100) {
+                    progress = 100;
                 }
                 console.log('progress: ' + progress)
                 $('.progressBar').width(`${progress}%`);
-                let badprogress=this.badStreak/(this.streakthreshold[0]/100);
-                if(badprogress>100){
-                    badprogress=100;
+                let badprogress = this.badStreak / (this.streakthreshold[0] / 100);
+                if (badprogress > 100) {
+                    badprogress = 100;
                 }
                 $('.badProgressBar').width(`${badprogress}%`);
                 this.showFeedback(finalTrain.value);
@@ -667,28 +682,28 @@ console.log(game);
 such ids are needed for the correct final equation
 */
 
-function DisplayPoints(changedPoints){
+function DisplayPoints(changedPoints) {
     var points = $("#points");
-    let color='red';
-    if(changedPoints>0){
-        color='green';
+    let color = 'red';
+    if (changedPoints > 0) {
+        color = 'green';
     }
-    var newPoints = $("<span class='animPoints'>"+ changedPoints + "</span>").css({
+    var newPoints = $("<span class='animPoints'>" + changedPoints + "</span>").css({
         'width': points.width(),
         'height': points.height(),
         'position': 'absolute',
         'top': points.offset().top,
         'left': points.offset().left,
-        'font-weight':'bold',
-        'font-size':'28 px',
+        'font-weight': 'bold',
+        'font-size': '28 px',
         'color': color
 
     });
     $('body').append(newPoints);
     newPoints.animate({
-        opacity:0,
+        opacity: 0,
         top: "-=50"
-    }, 1000,"linear", function() {
+    }, 1000, "linear", function () {
         this.remove();
-      });
+    });
 }
