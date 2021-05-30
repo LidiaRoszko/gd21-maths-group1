@@ -155,7 +155,7 @@ class Game {
             $('#feedbackNextButton').text("Nochmal Versuchen");
             $('#feedbackNextButton').show();
         }
-        $('#feedbackOverlay>.feedBackContainer>p').text(text);
+        $('#feedbackText').text(text);
         //$("#disablingActionsOverlay").show();
         $('#feedbackOverlay').show();
 
