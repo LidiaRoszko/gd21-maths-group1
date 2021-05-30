@@ -131,17 +131,31 @@ class Game {
             text = result + " ist korrekt! Die Kühe sind zufrieden!";
             $("#happyCow").show();
             $('#startStopButton').hide();
+            $('#feedbackNextButton').text("Nächste Runde");
+            $('#feedbackNextButton').click(null);
+            $('#feedbackNextButton').click(()=>this.nextRound());
+            $('#feedbackNextButton').show();
+
         } else if (correctValue > result) {
             text = result + " stimmt leider nicht! Einige Kühe bleiben Hungrig";
             $("#sadCow").show();
+            $('#feedbackNextButton').click(null);
+            $('#feedbackNextButton').click(()=>this.stopPlayMode());
+            $('#feedbackNextButton').text("Nochmal Versuchen");
+            $('#feedbackNextButton').show();
+
+
         } else {
             text = result + " stimmt leider nicht! Du hast zuviel geliefert und das Heu ist schlecht geworden.";
             $("#illCow").show();
+            $('#feedbackNextButton').click(null);
+            $('#feedbackNextButton').click(()=>this.stopPlayMode());
+            $('#feedbackNextButton').text("Nochmal Versuchen");
+            $('#feedbackNextButton').show();
         }
         $('#feedbackOverlay>.feedBackContainer>p').text(text);
         //$("#disablingActionsOverlay").show();
         $('#feedbackOverlay').show();
-        $('#feedbackNextButton').show();
 
     }
 
@@ -505,6 +519,9 @@ class Game {
 
     // loading the next round with a new equation
     nextRound() {
+        if(this.isPlayModeActive==true){
+            return;
+        };
 
         console.log("Next round")
         this.stopPlayMode();
