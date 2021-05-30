@@ -4,12 +4,10 @@ class Game {
     // all equations for the game TODO: Equations (numbers under 20 look still good)
     equations = [[
         //level 1
-        '(    15    +    9    )    +    2  +1  =    26',
         '(    6    +    13    )    -    11    =    8',
         '(    1    +    10    )    *    2    =    22',
         '(    2    +    12    )    /    2    =    7',
         '(    9    -    1    )    +    9    =    17',
-        //'(    13    -    10    )    -    5    =    -2',
         '(    14    -    8    )    *    4    =    24',
         '(    11    -    3    )    /    4    =    2',
         '(    2    *    6    )    +    10    =    22',
@@ -372,13 +370,13 @@ class Game {
         let startTrains = trainsArr.filter(x => (x.value !== undefined && x.value !== NaN));
         let stations = trainsArr.filter(x => x instanceof (JoinedTrain));
 
+        this.drawCows();
+
         this.drawRails(this.rails);
 
         this.drawTrains(startTrains);
 
         this.drawStations(stations);
-
-        this.drawCows();
     }
 
     drawCows() {
@@ -388,7 +386,20 @@ class Game {
         if (this.cowsPositions.length != eqValue) {
             this.cowsPositions = [];
             for (let j = 0; j < eqValue; j++) {
-                this.cowsPositions.push({ 'x': Math.floor(700 + 450 * Math.random()), 'y': Math.floor(5 + 100 * Math.random()) });
+                let x = Math.floor(600 + 450 * Math.random());
+                let y = Math.floor(5 + 125 * Math.random());
+                let repetition = false;
+                this.cowsPositions.forEach(pos => {
+                    if (Math.abs(pos.x - x) < 35 && Math.abs(pos.y - y) < 35) {
+                        repetition = true;
+                        return;
+                    }
+                });
+                if (repetition) {
+                    j--;
+                } else {
+                    this.cowsPositions.push({ 'x': x, 'y': y });
+                }
             }
         }
         // drawing cow
