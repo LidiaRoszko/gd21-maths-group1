@@ -746,10 +746,6 @@ class Game {
 
     // loading the next round with a new equation
     nextRound() {
-        if (this.isPlayModeActive == true) {
-            return;
-        };
-
         console.log("Next round")
         this.stopPlayMode();
         //$("#disablingActionsOverlay").hide();
@@ -881,7 +877,6 @@ class Game {
                 }
                 $('.badProgressBar').width(`${badprogress}%`);
                 this.showFeedback(finalTrain.value);
-                this.isPlayModeActive = false;
             }
         }.bind(this), delay);
     }
