@@ -518,14 +518,11 @@ class Game {
 
         // get 2 adjacent trains from the previous level
         let adjacentTrains = this.levelsMap.get(targetLevel - 1).filter((x, index) => (index == indexOfTargetTrain || index == indexOfTargetTrain + 1));
-        console.log(adjacentTrains);
         if (targetTrainId > originId) {
             adjacentTrains = [adjacentTrains[1]];
-            console.log(adjacentTrains);
 
         } else if (targetTrainId < originId) {
             adjacentTrains = [adjacentTrains[0]];
-            console.log(adjacentTrains);
         }
 
         adjacentTrains.forEach(adjacentTrain => {
