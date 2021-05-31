@@ -276,7 +276,7 @@ class Game {
 
     // points received in total
     points = 0;
-    level = 1;
+    level = 0;
     streak = 0;
     badStreak = 0;
     streakthreshold = [2, 3]
@@ -864,7 +864,7 @@ class Game {
                 let points = this.points;
                 finalTrain.move({ x: finalTrain.position.x + 250, y: finalTrain.position.y }, duration, 0);
                 $('#points').text(points);
-                $('#level').text(`Level: ${this.level}`);
+                $('#level').text(`Level: ${(this.level + 1)}`);
                 let progress = this.streak / (this.streakthreshold[1] / 100);
                 if (progress > 100) {
                     progress = 100;
