@@ -675,6 +675,7 @@ class Game {
                 }
                 $('.badProgressBar').width(`${badprogress}%`);
                 this.showFeedback(finalTrain.value);
+                this.isPlayModeActive = false;
             }
         }.bind(this), delay);
     }
