@@ -70,7 +70,7 @@
         <div class="game-button" onclick="game.nextRound()">Nächste Runde</div>
       </div>
       <div class="space-box">
-        <div class="game-text"><span id="level">Level: 0</span> | Punkte: <span id="points">0</span></div>
+        <div class="game-text"><span id="level">Level: 1</span> | Punkte: <span id="points">0</span></div>
         <span class="game-text">Ziel: <span id="target"></span></span>
       </div>
       <div class="progressBarContainer">
@@ -98,13 +98,13 @@
 
         <div class="feedback-container" id="feedbackContainer1">
           <div id="feedbackLeftSide">
+            <div class="feedback-text"></div>
+            <div class="game-button" id="feedbackNextButton" onclick="game.nextRound()">Nächste Runde</div>
+          </div>
+          <div id="feedbackRightSide">
             <img id="happyCow" src="assets/1.svg">
             <img id="illCow" src="assets/2.svg">
             <img id="sadCow" src="assets/3.svg">
-          </div>
-          <div id="feedbackRightSide">
-            <div class="feedback-text"></div>
-            <div class="game-button" id="feedbackNextButton" onclick="game.nextRound()">Nächste Runde</div>
           </div>
         </div>
       </div>

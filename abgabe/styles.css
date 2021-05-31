@@ -92,7 +92,7 @@ li {
 }
 
 #startStopButton {
-    width     : 115px;
+    width     : 145px;
     text-align: center;
 }
 
@@ -185,7 +185,7 @@ li {
     display: none;
 }
 
-#feedbackRightSide {
+#feedbackLeftSide {
     margin: auto;
 }
 
@@ -194,15 +194,15 @@ li {
     margin: 20px auto;
 }
 
-#feedbackLeftSide {
+#feedbackRightSide {
     padding      : 11px;
     margin       : auto 20px;
     border-radius: 100%;
     background   : #ffffff70;
 }
 
-#feedbackLeftSide img {
-    height : 120px;
+#feedbackRightSide img {
+    height : 140px;
     display: none;
 }
 

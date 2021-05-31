@@ -276,7 +276,7 @@ class Game {
 
     // points received in total
     points = 0;
-    level = 0;
+    level = 1;
     streak = 0;
     badStreak = 0;
     streakthreshold = [2, 3]
@@ -334,7 +334,7 @@ class Game {
         let correctValue = eval(this.equation);
         let text = ""
         if (correctValue == result) {
-            text = result + " ist korrekt! Die Kühe sind zufrieden!";
+            text = result + " ist korrekt! Die Kühe sind zufrieden.";
             $("#happyCow").show();
             $('#startStopButton').hide();
             $('#feedbackNextButton').text("Nächste Runde");
@@ -343,20 +343,20 @@ class Game {
             $('#feedbackNextButton').show();
 
         } else if (correctValue > result) {
-            text = result + " stimmt leider nicht! Einige Kühe bleiben hungrig";
+            text = result + " stimmt leider nicht! Einige Kühe bleiben hungrig.";
             $("#sadCow").show();
             $('#feedbackNextButton').click(null);
             $('#feedbackNextButton').click(() => this.stopPlayMode());
-            $('#feedbackNextButton').text("Nochmal Versuchen");
+            $('#feedbackNextButton').text("Noch einmal versuchen");
             $('#feedbackNextButton').show();
 
 
         } else {
-            text = result + " stimmt leider nicht! Du hast zuviel geliefert und das Heu ist schlecht geworden.";
+            text = result + " stimmt leider nicht! Du hast zu viel geliefert und das Heu ist schlecht geworden.";
             $("#illCow").show();
             $('#feedbackNextButton').click(null);
             $('#feedbackNextButton').click(() => this.stopPlayMode());
-            $('#feedbackNextButton').text("Nochmal Versuchen");
+            $('#feedbackNextButton').text("Noch einmal versuchen");
             $('#feedbackNextButton').show();
         }
         $('#feedbackContainer1 .feedback-text').text(text);
@@ -860,7 +860,7 @@ class Game {
                     }*/
 
                     console.log("Incorrect!");
-                    $("#startStopButton")[0].innerText = "Nochmal";
+                    $("#startStopButton")[0].innerText = "Noch einmal";
                     DisplayPoints(-5);
                     this.points -= 5;
                 }
