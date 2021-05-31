@@ -834,12 +834,14 @@ class Game {
                     this.streak++;
                     this.badStreak = 0;
                     if (this.streakthreshold[1] == this.streak) {
-                        if (this.level < this.equations.length - 1) {
-                            this.level++;
-                        }
                         this.streakthreshold[1] = this.streakthreshold[0] + this.streakthreshold[1];
                         this.streakthreshold[0] = this.streakthreshold[1] - this.streakthreshold[0];
                         this.streak = 0;
+                        if (this.level < this.equations.length - 1) {
+                            this.level++;
+                        } else {
+                            this.streak = this.streakthreshold[1];
+                        }
                     }
                     console.log("Correct!");
                     isCorrect = true;
