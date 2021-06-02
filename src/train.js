@@ -7,7 +7,7 @@ class Train {
         this.position = position;
         this.level = level;
         this.finalTrain = false;
-        this.connectedToStation=false;
+        this.connectedToStation = false;
     }
 
     async move(target, duration, delay) {

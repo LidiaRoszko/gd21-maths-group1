@@ -17,9 +17,9 @@ class JoinedTrain extends Train {
     connectWith(trains) {
         this.subTrains = [];
         this.subTrains.push(...trains);
-        
+
         trains.forEach(train => {
-            train.connectedToStation=true;
+            train.connectedToStation = true;
         });
 
         this.visible = true;
